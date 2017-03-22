@@ -1,6 +1,6 @@
 # Swift Util
 --
-###Swift utility package.
+### Swift utility package.
 
 Introduction
 --
@@ -16,7 +16,7 @@ The are no external dependencies beyond Apple's Frameworks. So this is somewhat 
 Installation
 --
 ```bash
-	make
+make
 ```
 
 ## Warning
