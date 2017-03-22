@@ -4,15 +4,19 @@
 #
 ###############################################
 
-CFLAGS  := -Xswiftc -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include
+all: build
 
-LDFLAGS := -Xlinker -rpath -Xlinker /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks
+build:
+	swift build
 
-all:
-	swift build $(CFLAGS) $(LDFLAGS) -Xlinker -lswiftCore
+install: build
+	swift 
 
 test:
-	swift test $(CFLAGS) $(LDFLAGS) -Xlinker -lswiftCore
+	swift test -Xlinker -lUtil
 
 clean:
-	rm -rf .build
+	swift build --clean
+
+lint:
+	swiftlint
