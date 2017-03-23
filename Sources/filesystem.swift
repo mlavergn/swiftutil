@@ -34,12 +34,21 @@ public struct FileSystem {
 	/**
 	*/
 	public static var homeDirectory: URL {
-		if #available(iOS 10.0, macOS 10.12, tvOS 10.0, watchOS 3.0, *) {
-			return FileManager.default.homeDirectoryForCurrentUser
-		} else {
-			// @TODO fix this
+		#if os(iOS)
+			if let url = URL(string:NSHomeDirectory()) {
+				return url
+			} else {
+				return URL(string:"")!
+			}
+		#elseif os(macOS)
+			if #available(macOS 10.12, *) {
+				return FileManager.default.homeDirectoryForCurrentUser
+			} else {
+				return URL(string:"")!
+			}
+		#else
 			return URL(string:"")!
-		}
+		#endif
 	}
 
 	/**

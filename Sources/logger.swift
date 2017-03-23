@@ -123,7 +123,11 @@ public struct Log {
 	*/
 	public static func dumpFile(output: String) {
 		if #available(iOS 10.0, macOS 10.12, tvOS 10.0, watchOS 3.0, *) {
-			var pathURL = FileManager.default.homeDirectoryForCurrentUser
+			#if os(iOS)
+	 			var pathURL = URL(string:NSHomeDirectory())!
+	 		#else
+	 			var pathURL = FileManager.default.homeDirectoryForCurrentUser
+	 		#endif
 			pathURL = pathURL.appendingPathComponent("log/swift")
 			do {
 				try FileManager.default.createDirectory(atPath: pathURL.path, withIntermediateDirectories: true, attributes: nil)
