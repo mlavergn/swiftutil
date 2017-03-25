@@ -14,7 +14,7 @@ test:
 
 clean:
 	swift build --clean
-	rm -df ios ios.swiftdoc
+	rm -rf ios ios.swiftdoc
 
 lint:
 	swiftlint
@@ -29,5 +29,6 @@ MODULE    := Util
 
 ios:
 	# Test swiftc cross compile setup on OS X
-	mkdir -p ios
-	swiftc -I $(INCL_PATH) -F $(LIB_PATH) -target $(TARGET) -sdk $(SDK_PATH) -emit-module  -emit-module-path ios -module-name $(MODULE) -framework Foundation Sources/*.swift
+	rm -rf iosBuild iosBuild.swiftdoc
+	mkdir -p iosBuild
+	swiftc -I $(INCL_PATH) -F $(LIB_PATH) -target $(TARGET) -sdk $(SDK_PATH) -emit-module  -emit-module-path iosBuild -module-name $(MODULE) -framework Foundation Sources/*.swift
