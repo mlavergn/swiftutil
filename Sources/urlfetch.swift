@@ -1,7 +1,6 @@
 import Foundation
 
-public class URLFetch {
-	var urlString: String?
+public struct URLFetch {
 
 	// required
 	public init() {
@@ -10,7 +9,7 @@ public class URLFetch {
 	/**
 	blocking
 	*/
-	public func fetchStringContents(_ urlString: String) -> (String, Error?) {
+	public static func fetchStringContents(_ urlString: String) -> (String, Error?) {
 		if let url = URL(string:urlString) {
 			do {
 				let contents: String = try String(contentsOf:url)
@@ -25,7 +24,7 @@ public class URLFetch {
 	/**
 	blocking
 	*/
-	public func fetchDataContents(_ urlString: String) -> (Data, Error?) {
+	public static func fetchDataContents(_ urlString: String) -> (Data, Error?) {
 		if let url = URL(string:urlString) {
 			do {
 				let contents = try Data(contentsOf:url)
@@ -40,7 +39,7 @@ public class URLFetch {
 	/**
 	non-blocking
 	*/
-	public func fetchDataTask(_ url: String, completionHandler:@escaping((String?) -> Void)) -> URLSessionDataTask {
+	public static func fetchDataTask(_ url: String, completionHandler:@escaping((String?) -> Void)) -> URLSessionDataTask {
 		let sessionConfiguration = URLSessionConfiguration.default
 		let session = URLSession(configuration: sessionConfiguration)
 		let url = URL(string: url)!

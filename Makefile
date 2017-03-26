@@ -14,7 +14,7 @@ test:
 
 clean:
 	swift build --clean
-	rm -rf ios ios.swiftdoc
+	rm -rf iosBuild iosBuild.swiftdoc
 
 lint:
 	swiftlint

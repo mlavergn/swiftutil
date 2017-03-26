@@ -7,8 +7,10 @@ enum ErrorKey: String {
 }
 
 extension NSError {
-	public static func error(_ message: String, function: String = #function, file: String = #file, line: Int = #line) -> NSError {
 
+	/**
+	*/
+	public static func error(_ message: String, function: String = #function, file: String = #file, line: Int = #line) -> NSError {
 		let customError = NSError(domain: App.bundleId, code: 0, userInfo: [
 				NSLocalizedDescriptionKey: message.localized,
 				ErrorKey.function: function,
