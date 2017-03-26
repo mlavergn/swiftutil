@@ -3,6 +3,7 @@ import Foundation
 public struct App {
 
 	/**
+	Application bundle identifier
 	*/
 	public static var bundleId: String {
 		if let ident = Bundle.main.bundleIdentifier {
@@ -13,12 +14,13 @@ public struct App {
 	}
 
 	/**
+	Application bundle version
 	*/
-	public static var bundleVersion: String? {
+	public static var bundleVersion: String {
 		if let version = Bundle.main.object(forInfoDictionaryKey: kCFBundleVersionKey as String) as? String {
-			return version as String
+			return version
 		} else {
-			return "0.0.0"
+			return "0"
 		}
 	}
 }

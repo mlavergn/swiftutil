@@ -19,6 +19,9 @@ clean:
 lint:
 	swiftlint
 
+genxc:
+	swift package generate-xcodeproj
+
 SYS_PATH  := /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform
 INCL_PATH := $(SYS_PATH)/Developer/SDKs/iPhoneOS.sdk/usr/include
 LIB_PATH  := $(SYS_PATH)/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks
