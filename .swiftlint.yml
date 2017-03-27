@@ -8,6 +8,5 @@ variable_name:
     warning: 2
 line_length: 160
 disabled_rules:
-  - todo
   - control_statement
   - unused_closure_parameter

@@ -1,14 +1,16 @@
+/// URLFetch struct with canned fetch helpers
+///
+/// - author: Marc Lavergne <mlavergn@gmail.com>
+/// - copyright: 2017 Marc Lavergne. All rights reserved.
+/// - license: MIT
 import Foundation
 
 public struct URLFetch {
 
-	// required
-	public init() {
-	}
-
-	/**
-	blocking
-	*/
+	/// Blocking fetch of String content at the given url String
+	///
+	/// - Parameter urlString: url as a String
+	/// - Returns: Tuple containing String with contents and optional Error
 	public static func fetchStringContents(_ urlString: String) -> (String, Error?) {
 		if let url = URL(string:urlString) {
 			do {
@@ -21,9 +23,10 @@ public struct URLFetch {
 		return ("", NSError.error("invalid URL"))
 	}
 
-	/**
-	blocking
-	*/
+	/// Blocking fetch of Data content at the given url String
+	///
+	/// - Parameter urlString: url as a String
+	/// - Returns: Tuple containing Data with contents and optional Error
 	public static func fetchDataContents(_ urlString: String) -> (Data, Error?) {
 		if let url = URL(string:urlString) {
 			do {
@@ -36,13 +39,16 @@ public struct URLFetch {
 		return (Data(), NSError.error("invalid URL"))
 	}
 
-	/**
-	non-blocking
-	*/
-	public static func fetchDataTask(_ url: String, completionHandler:@escaping((String?) -> Void)) -> URLSessionDataTask {
+	/// Non-blocking fetch of content at the given url String
+	///
+	/// - Parameters:
+	///   - urlString:  url as a String
+	///   - completionHandler: completion handler taking an optional String as a parameter, returning Void
+	/// - Returns: URLSessionDataTask in use
+	public static func fetchDataTask(_ urlString: String, completionHandler:@escaping((String?) -> Void)) -> URLSessionDataTask {
 		let sessionConfiguration = URLSessionConfiguration.default
 		let session = URLSession(configuration: sessionConfiguration)
-		let url = URL(string: url)!
+		let url = URL(string: urlString)!
 
 		let task = session.dataTask(with: url, completionHandler: {data, response, error in
 				if let d = data {

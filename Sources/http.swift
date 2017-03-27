@@ -1,10 +1,15 @@
+/// HTTP struct with common task helpers
+///
+/// - author: Marc Lavergne <mlavergn@gmail.com>
+/// - copyright: 2017 Marc Lavergne. All rights reserved.
+/// - license: MIT
 import Foundation
 
-public class JSONTask {
+public struct HTTP {
 
 	/**
 	*/
-	public func upload(url: String, json: [String: Any]) {
+	public static func postJSON(url: String, json: [String: Any]) {
 		let sessionConfiguration = URLSessionConfiguration.default
 
 		let session = URLSession(configuration:sessionConfiguration)
@@ -19,15 +24,17 @@ public class JSONTask {
 
 		//	[multipartFormData addFile:data2 parameterName:@"file2" filename:@"myimage2.png" contentType:@"image/png"];
 
-		let postData = JSON.encode(json)
+		let postData = JSON.encodeAsData(json)
 		let uploadTask = session.uploadTask(with: request, from: postData!)
 
 		uploadTask.resume()
 	}
 
-	/**
-	*/
-	public func fetch(url: String) -> Any {
+	/// Description
+	///
+	/// - Parameter url: <#url description#>
+	/// - Returns: <#return value description#>
+	public static func getJSON(url: String) -> [String: Any] {
 		let sessionConfiguration = URLSessionConfiguration.default
 
 		let session = URLSession(configuration:sessionConfiguration)
@@ -37,14 +44,14 @@ public class JSONTask {
 
 		request.httpMethod = "GET"
 
-		var result: Any? = nil
+		var result: [String: AnyObject]? = nil
 		let cndlock = NSConditionLock(condition: 0)
 
 		let downloadTask = session.downloadTask(with: request) { (url: URL?, response: URLResponse?, err: Error?) in
 			if let url = url {
 				print(url.absoluteString as String!)
 				let payload = URLFetch.fetchDataContents(url.absoluteString)
-				result = JSON.decode(payload.0)
+				result = JSON.decodeData(payload.0)
 			}
 			cndlock.unlock(withCondition: 1)
 		}

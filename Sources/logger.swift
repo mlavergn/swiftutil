@@ -1,15 +1,34 @@
+/// App struct with package or bundle related helpers
+///
+/// -todo:
+/// Ideally this would leverage the unified logging system but
+/// it appears to be broken in 3.0.2
+///
+/// if #available(iOS 10.0, macOS 10.12, tvOS 10.0, watchOS 3.0, *) {
+///	  logInstance = OSLog(subsystem:subsystem, category:category)
+///	  os_log("demo", log:logInstance, type:.error)
+/// }
+///
+/// - author: Marc Lavergne <mlavergn@gmail.com>
+/// - copyright: 2017 Marc Lavergne. All rights reserved.
+/// - license: MIT
 import Foundation
 
-/**
-Keeping these for easy reference
-#if os(iOS) / os(OSX) / os(tvOS)
-*/
 #if os(Linux)
 import Glibc
 #else
 import Darwin
 #endif
 
+/// Log levels
+///
+/// - ALL: No filtering of log messages
+/// - DEBUG: Debug level or more severe
+/// - INFO: Info level or more severe
+/// - WARN: Warn level or more severe
+/// - ERROR: Error level or more severe
+/// - FATAL: Fatal level or more severe
+/// - OFF: No log messages
 public enum LogLevel: Int {
 	case ALL = 0
 	case DEBUG
@@ -20,6 +39,12 @@ public enum LogLevel: Int {
 	case OFF
 }
 
+/// Log destination
+///
+/// - STDOUT: Console output
+/// - STDERR: Error log and console
+/// - FILE: File output
+/// - SYSTEM: System log output
 public enum LogDestination: Int {
 	case STDOUT = 0
 	case STDERR
@@ -27,100 +52,97 @@ public enum LogDestination: Int {
 	case SYSTEM
 }
 
-/**
-@TODO 
-Ideally this would leverage the unified logging system but
-it appears to be broken in 3.0.2
-
-if #available(iOS 10.0, macOS 10.12, tvOS 10.0, watchOS 3.0, *) {
-	logInstance = OSLog(subsystem:subsystem, category:category)
-	os_log("demo", log:logInstance, type:.error)
-}
-
-produces no output
-*/
-
 public struct Log {
+
+	/// Filter level
 	static var logLevel: LogLevel = LogLevel.ALL
+	/// Log destination
 	static var logDestination: LogDestination = LogDestination.STDOUT
 
+	/// Timer singleton for performance measurement
 	static var timeMark: DispatchTime?
 
-	/**
-	Configures the logging
-	*/
+	/// Configure the logger
+	///
+	/// - Parameters:
+	///   - level: Filter level for output
+	///   - destination: Log destination
 	public static func configure(level: LogLevel, destination: LogDestination) {
 		logLevel = level
 		logDestination = destination
 	}
 
-	/**
-	Outputs data to a destination
-	*/
+	/// Outputs a log message to the set destination
+	///
+	/// - Parameter message: description as a String
  	@inline(__always) public static func output(_ message: String) {
 		switch(logDestination) {
 			case .STDERR:
 				fputs("\(message)\n", __stderrp)
 			default:
 				print(message)
+			// - todo: implemement the other destination
 		}
 	}
 
-	/**
-	Debug level messages
-	*/
+	/// Debug level log message
+	///
+	/// - Parameter message: description as a String
  	@inline(__always) public static func debug(_ message: String) {
 		if logLevel.rawValue <= LogLevel.DEBUG.rawValue {
 			output("DEBUG: \(message)")
 		}
 	}
 
-	/**
-	Info level messages
-	*/
+	/// Information level log message
+	///
+	/// - Parameter message: description as a String
 	@inline(__always) public static func info(_ message: String) {
 		if logLevel.rawValue <= LogLevel.INFO.rawValue {
 			output("INFO: \(message)")
 		}
 	}
 
-	/**
-	Warn level messages
-	*/
+	/// Warning level log message
+	///
+	/// - Parameter message: description as a String
 	@inline(__always) public static func warn(_ message: String) {
 		if logLevel.rawValue <= LogLevel.WARN.rawValue {
 			output("WARN: \(message)")
 		}
 	}
 
-	/**
-	Error level messages
-	*/
+	/// Error level log message
+	///
+	/// - Parameter message: description as a String
 	static public func error(_ message: String) {
 		if logLevel.rawValue <= LogLevel.ERROR.rawValue {
 			output("ERROR: \(message)")
 		}
 	}
 
-	/**
-	Fatal level messages
-	*/
+	/// Fatal level log message
+	///
+	/// - Parameter message: description as a String
 	static public func fatal(_ message: String) {
 		output("FATAL: \(message)")
 	}
 
-	/**
-	Outputs the file, function, and line stamp to stdout
-	*/
+	/// Outputs the file, function, and line stamp to stdout
+	///
+	/// - Parameters:
+	///   - function: function name as a String (should not be provided)
+	///   - file: file name as a String (should not be provided)
+	///   - line: line as an Int (should not be provided)
 	@inline(__always) public static func stamp(function: String = #function, file: String = #file, line: Int = #line) {
 		if logLevel.rawValue <= LogLevel.DEBUG.rawValue {
 			 output("[File:\(file), Function:\(function), Line:\(line)]")
 		}
 	}
 
-	/**
-	Measures elapsed time and prints a nanosecond resolution time to stdout
-	*/
+	/// Saves the content String to file at $HOME/log/swift/<epoch>.log
+	///
+	/// - Parameter message: output as a String
 	public static func dumpFile(output: String) {
 		if #available(iOS 10.0, macOS 10.12, tvOS 10.0, watchOS 3.0, *) {
 			#if os(iOS)
@@ -140,16 +162,12 @@ public struct Log {
 		}
 	}
 
-	/**
-	Measures elapsed time and prints a nanosecond resolution time to stdout
-	*/
+	/// Resets the elapsed time marker to being a new measurement
 	public static var timerMark: Void {
 		timeMark = DispatchTime.now()
 	}
 
-	/**
-	Measures elapsed time and prints a nanosecond resolution time to stdout
-	*/
+	/// Measures the elapsed time since the last mark in milliseconds
 	public static var timerMeasure: Void {
 		if timeMark != nil {
 			let timeInterval = Double(DispatchTime.now().uptimeNanoseconds - timeMark!.uptimeNanoseconds) / 1_000_000
