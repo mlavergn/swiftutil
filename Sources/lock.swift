@@ -14,17 +14,13 @@
 import Foundation
 import Darwin
 
-public class Lockable {
+public class Lockable: NSObject {
 
 	/// Shared condition for non-queue waits
 	let cnd = NSCondition()
 
 	/// Shared condition lock for queueing
 	let cndlock = NSConditionLock(condition: 0)
-
-	/// Required
-	public init() {
-	}
 
 	/// Obtain the shared lock
 	public func hold() {

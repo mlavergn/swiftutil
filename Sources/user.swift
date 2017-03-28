@@ -12,6 +12,11 @@ public struct User {
 		return NSUserName()
 	}
 
+	/// The active user full name as a String
+	public static var fullName: String {
+		return NSFullUserName()
+	}
+
 	/// Query user defaults for an Int value
 	///
 	/// - Parameter forKey: key name as a String

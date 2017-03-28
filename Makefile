@@ -34,4 +34,4 @@ ios:
 	# Test swiftc cross compile setup on OS X
 	rm -rf iosBuild iosBuild.swiftdoc
 	mkdir -p iosBuild
-	swiftc -I $(INCL_PATH) -F $(LIB_PATH) -target $(TARGET) -sdk $(SDK_PATH) -emit-module  -emit-module-path iosBuild -module-name $(MODULE) -framework Foundation Sources/*.swift
+	swiftc -I $(INCL_PATH) -F $(LIB_PATH) -target $(TARGET) -sdk $(SDK_PATH) -emit-module  -emit-module-path iosBuild -module-name $(MODULE) -framework Foundation -framework AVFoundation Sources/*.swift
