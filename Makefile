@@ -4,13 +4,16 @@
 #
 ###############################################
 
+SWIFTC_OPTS := 
+LINKER_OPTS := -Xlinker -lUtil
+
 all: build
 
 build:
-	swift build
+	swift build $(SWIFTC_OPTS) $(LINKER_OPTS) 
 
 test:
-	swift test -Xlinker -lUtil
+	swift test $(SWIFTC_OPTS) $(LINKER_OPTS) 
 
 clean:
 	swift build --clean
@@ -31,7 +34,6 @@ TARGET    := arm64-apple-ios10.0
 MODULE    := Util
 
 ios:
-	# Test swiftc cross compile setup on OS X
 	rm -rf iosBuild iosBuild.swiftdoc
 	mkdir -p iosBuild
 	swiftc -I $(INCL_PATH) -F $(LIB_PATH) -target $(TARGET) -sdk $(SDK_PATH) -emit-module  -emit-module-path iosBuild -module-name $(MODULE) -framework Foundation -framework AVFoundation Sources/*.swift
