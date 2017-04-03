@@ -14,13 +14,22 @@
 import Foundation
 import Darwin
 
-public class Lockable: NSObject {
+/// Conditional lock states
+///
+/// - READY: Ready to block a task
+/// - FINISHED: Ready to unblock a task
+public enum FutureState: Int {
+	case READY    = 0
+	case FINISHED
+}
+
+public class Future: NSObject {
 
 	/// Shared condition for non-queue waits
 	let cnd = NSCondition()
 
 	/// Shared condition lock for queueing
-	let cndlock = NSConditionLock(condition: 0)
+	let cndlock = NSConditionLock(condition: FutureState.READY.rawValue)
 
 	/// Obtain the shared lock
 	public func hold() {
@@ -46,17 +55,17 @@ public class Lockable: NSObject {
 	///
 	/// - Parameter block: block of work to perform as a closure
 	public func queue(block: @autoclosure() -> Void) {
-		cndlock.lock(whenCondition: 1)
+		cndlock.lock(whenCondition: FutureState.FINISHED.rawValue)
 		block()
-		cndlock.unlock(withCondition: 0)
+		cndlock.unlock(withCondition: FutureState.READY.rawValue)
 	}
 
 	/// dequeues the next work block
 	///
 	/// - Parameter block: block of work to perform as a closure
 	public func dequeue(block: @autoclosure() -> Void) {
-		cndlock.lock(whenCondition: 0)
+		cndlock.lock(whenCondition: FutureState.READY.rawValue)
 		block()
-		cndlock.unlock(withCondition: 1)
+		cndlock.unlock(withCondition: FutureState.FINISHED.rawValue)
 	}
 }

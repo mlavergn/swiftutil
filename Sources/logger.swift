@@ -87,10 +87,27 @@ public struct Log {
 
 	/// Debug level log message
 	///
-	/// - Parameter message: description as a String
- 	@inline(__always) public static func debug(_ message: String) {
+	/// - Parameter message: description as a String optional
+ 	@inline(__always) public static func debug(_ message: String?) {
 		if logLevel.rawValue <= LogLevel.DEBUG.rawValue {
-			output("DEBUG: \(message)")
+			if message == nil {
+				output("DEBUG: [empty optional]")
+			} else {
+				output("DEBUG: \(message!)")
+			}
+		}
+	}
+
+	/// Debug level log message
+	///
+	/// - Parameter object: Any optional to print as a debug string
+	@inline(__always) public static func debug(_ object: Any?) {
+		if logLevel.rawValue <= LogLevel.DEBUG.rawValue {
+			if object == nil {
+				output("DEBUG: [empty optional]")
+			} else {
+				output("DEBUG: \(object.debugDescription)")
+			}
 		}
 	}
 
@@ -118,6 +135,15 @@ public struct Log {
 	static public func error(_ message: String) {
 		if logLevel.rawValue <= LogLevel.ERROR.rawValue {
 			output("ERROR: \(message)")
+		}
+	}
+
+	/// Error level log message
+	///
+	/// - Parameter error: Error object
+	static public func error(_ error: Error) {
+		if logLevel.rawValue <= LogLevel.ERROR.rawValue {
+			output("ERROR: \(error.localizedDescription)")
 		}
 	}
 
