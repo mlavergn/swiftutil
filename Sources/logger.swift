@@ -55,19 +55,19 @@ public enum LogDestination: Int {
 public struct Log {
 
 	/// Filter level
-	static var logLevel: LogLevel = LogLevel.ALL
+	public static var logLevel: LogLevel = LogLevel.WARN
 	/// Log destination
-	static var logDestination: LogDestination = LogDestination.STDOUT
+	public static var logDestination: LogDestination = LogDestination.STDOUT
 
 	/// Timer singleton for performance measurement
-	static var timeMark: DispatchTime?
+	public static var timeMark: DispatchTime?
 
 	/// Configure the logger
 	///
 	/// - Parameters:
 	///   - level: Filter level for output
 	///   - destination: Log destination
-	public static func configure(level: LogLevel, destination: LogDestination) {
+	public static func configure(level: LogLevel, destination: LogDestination = .STDOUT) {
 		logLevel = level
 		logDestination = destination
 	}
@@ -88,12 +88,12 @@ public struct Log {
 	/// Debug level log message
 	///
 	/// - Parameter message: description as a String optional
- 	@inline(__always) public static func debug(_ message: String?) {
+ 	@inline(__always) public static func debug(_ message: String?, file: String = #file, function: String = #function, line: Int = #line) {
 		if logLevel.rawValue <= LogLevel.DEBUG.rawValue {
 			if message == nil {
-				output("DEBUG: [empty optional]")
+				output("DEBUG:[\(file.fileName).\(function):\(line)] empty optional")
 			} else {
-				output("DEBUG: \(message!)")
+				output("DEBUG:[\(file.fileName).\(function):\(line)] \(message!)")
 			}
 		}
 	}
@@ -101,12 +101,12 @@ public struct Log {
 	/// Debug level log message
 	///
 	/// - Parameter object: Any optional to print as a debug string
-	@inline(__always) public static func debug(_ object: Any?) {
+	@inline(__always) public static func debug(_ object: Any?, file: String = #file, function: String = #function, line: Int = #line) {
 		if logLevel.rawValue <= LogLevel.DEBUG.rawValue {
 			if object == nil {
-				output("DEBUG: [empty optional]")
+				output("DEBUG:[\(file.fileName).\(function):\(line)] empty optional")
 			} else {
-				output("DEBUG: \(object.debugDescription)")
+				output("DEBUG:[\(file.fileName).\(function):\(line)] \(object.debugDescription)")
 			}
 		}
 	}
@@ -114,44 +114,44 @@ public struct Log {
 	/// Information level log message
 	///
 	/// - Parameter message: description as a String
-	@inline(__always) public static func info(_ message: String) {
+	@inline(__always) public static func info(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
 		if logLevel.rawValue <= LogLevel.INFO.rawValue {
-			output("INFO: \(message)")
+			output("INFO:[\(file.fileName).\(function):\(line)] \(message)")
 		}
 	}
 
 	/// Warning level log message
 	///
 	/// - Parameter message: description as a String
-	@inline(__always) public static func warn(_ message: String) {
+	@inline(__always) public static func warn(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
 		if logLevel.rawValue <= LogLevel.WARN.rawValue {
-			output("WARN: \(message)")
+			output("WARN:[\(file.fileName).\(function):\(line)] \(message)")
 		}
 	}
 
 	/// Error level log message
 	///
 	/// - Parameter message: description as a String
-	static public func error(_ message: String) {
+	static public func error(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
 		if logLevel.rawValue <= LogLevel.ERROR.rawValue {
-			output("ERROR: \(message)")
+			output("ERROR:[\(file.fileName).\(function):\(line)] \(message)")
 		}
 	}
 
 	/// Error level log message
 	///
 	/// - Parameter error: Error object
-	static public func error(_ error: Error) {
+	static public func error(_ error: Error, file: String = #file, function: String = #function, line: Int = #line) {
 		if logLevel.rawValue <= LogLevel.ERROR.rawValue {
-			output("ERROR: \(error.localizedDescription)")
+			output("ERROR:[\(file.fileName).\(function):\(line)] \(error.localizedDescription)")
 		}
 	}
 
 	/// Fatal level log message
 	///
 	/// - Parameter message: description as a String
-	static public func fatal(_ message: String) {
-		output("FATAL: \(message)")
+	static public func fatal(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
+		output("FATAL:[\(file.fileName).\(function):\(line)] \(message)")
 	}
 
 	/// Outputs the file, function, and line stamp to stdout
@@ -160,7 +160,7 @@ public struct Log {
 	///   - function: function name as a String (should not be provided)
 	///   - file: file name as a String (should not be provided)
 	///   - line: line as an Int (should not be provided)
-	@inline(__always) public static func stamp(function: String = #function, file: String = #file, line: Int = #line) {
+	@inline(__always) public static func stamp(file: String = #file, function: String = #function, line: Int = #line) {
 		if logLevel.rawValue <= LogLevel.DEBUG.rawValue {
 			 output("[File:\(file), Function:\(function), Line:\(line)]")
 		}
