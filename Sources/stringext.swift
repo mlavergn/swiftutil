@@ -97,6 +97,11 @@ public extension String {
 		return self[self.index(self.startIndex, offsetBy:index)]
 	}
 
+	/// Treats the string as a path and isolates the filename
+	public var fileName: String {
+		return ((self as NSString).lastPathComponent as NSString).deletingPathExtension
+	}
+
 	/// Replaces a substring within a String
 	///
 	/// - Parameters:
