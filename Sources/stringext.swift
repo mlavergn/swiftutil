@@ -89,6 +89,15 @@ public extension String {
 		return self.substring(with: range)
 	}
 
+	/// Extracts a substring from start to the given to offset
+	///
+	/// - Parameters:
+	///   - to: characters index as an Int marking the end of substring
+	/// - Returns: substring as a String
+	public func substring(to: Int) -> String {
+		return self.substring(from: 0, to: to)
+	}
+
 	/// Extracts the character at the given index
 	///
 	/// - Parameter index: index of character as Int

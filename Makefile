@@ -16,7 +16,8 @@ test:
 	swift test $(SWIFTC_OPTS) $(LINKER_OPTS) 
 
 clean:
-	swift build --clean
+	swift package clean
+	rm -rf .build
 	rm -rf iosBuild iosBuild.swiftdoc
 
 lint:

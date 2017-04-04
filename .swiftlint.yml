@@ -6,7 +6,7 @@ type_name:
 variable_name:
   min_length:
     warning: 2
-line_length: 160
+line_length: 180
 disabled_rules:
   - control_statement
   - unused_closure_parameter
