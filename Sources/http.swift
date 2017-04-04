@@ -20,22 +20,28 @@ public enum HTTPMethodKey: String {
 /// - html: HTML content
 /// - text: Plain text content
 /// - bin: Binary content
+/// - form: Multipart form content
 public enum HTTPMIMEKey: String {
 	case json    = "application/json"
 	case html    = "text/html"
 	case text    = "text/plain"
 	case bin     = "application/octet-stream"
+	case form    = "multipart/form-data"
 }
 
 /// HTTP Headers
 ///
+/// - host: Host header
 /// - contentType: Content-Type header
+/// - contentLength: Content-Length header
 /// - accept: Accept header
 /// - userAgent: User-Agent header
 public enum HTTPHeaderKey: String {
-	case contentType  = "Content-Type"
-	case accept       = "Accept"
-	case userAgent    = "User-Agent"
+	case host          = "Host"
+	case contentType   = "Content-Type"
+	case contentLength = "Content-Length"
+	case accept        = "Accept"
+	case userAgent     = "User-Agent"
 }
 
 /// User Agent Strings
@@ -53,8 +59,8 @@ public enum HTTPUserAgentKey: String {
 
 public class HTTP: NSObject {
 	private var sessionConfiguration: URLSessionConfiguration
-	private var session: URLSession
-	private var request: URLRequest
+	public var session: URLSession
+	internal var request: URLRequest
 
 	/// Primary initializer
 	override public init() {
