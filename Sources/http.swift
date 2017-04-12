@@ -36,12 +36,14 @@ public enum HTTPMIMEKey: String {
 /// - contentLength: Content-Length header
 /// - accept: Accept header
 /// - userAgent: User-Agent header
+/// - contentEncoding: Content-Transfer-Encoding header
 public enum HTTPHeaderKey: String {
-	case host          = "Host"
-	case contentType   = "Content-Type"
-	case contentLength = "Content-Length"
-	case accept        = "Accept"
-	case userAgent     = "User-Agent"
+	case host               = "Host"
+	case contentType        = "Content-Type"
+	case contentLength      = "Content-Length"
+	case accept             = "Accept"
+	case userAgent          = "User-Agent"
+	case contentEncoding    = "Content-Transfer-Encoding"
 }
 
 /// User Agent Strings
@@ -57,6 +59,7 @@ public enum HTTPUserAgentKey: String {
 	case windows  = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"
 }
 
+// MARK: - HTTP object
 public class HTTP: NSObject {
 	private var sessionConfiguration: URLSessionConfiguration
 	public var session: URLSession
