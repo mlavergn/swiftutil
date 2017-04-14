@@ -23,7 +23,7 @@ clean:
 lint:
 	swiftlint
 
-genxc:
+xc:
 	swift package generate-xcodeproj
 
 SYS_PATH  := /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform
