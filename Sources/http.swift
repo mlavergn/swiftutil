@@ -27,6 +27,7 @@ public enum HTTPMIMEKey: String {
 	case text    = "text/plain"
 	case bin     = "application/octet-stream"
 	case form    = "multipart/form-data"
+	case jpg     = "image/jpeg"
 }
 
 /// HTTP Headers
@@ -35,6 +36,8 @@ public enum HTTPMIMEKey: String {
 /// - contentType: Content-Type header
 /// - contentLength: Content-Length header
 /// - accept: Accept header
+/// - acceptLanguage: Accept-Language header
+/// - acceptEncoding: Accept-Encoding header
 /// - userAgent: User-Agent header
 /// - contentEncoding: Content-Transfer-Encoding header
 public enum HTTPHeaderKey: String {
@@ -42,6 +45,8 @@ public enum HTTPHeaderKey: String {
 	case contentType        = "Content-Type"
 	case contentLength      = "Content-Length"
 	case accept             = "Accept"
+	case acceptLanguage     = "Accept-Language"
+	case acceptEncoding     = "Accept-Encoding"
 	case userAgent          = "User-Agent"
 	case contentEncoding    = "Content-Transfer-Encoding"
 }
@@ -61,9 +66,10 @@ public enum HTTPUserAgentKey: String {
 
 // MARK: - HTTP object
 public class HTTP: NSObject {
-	private var sessionConfiguration: URLSessionConfiguration
+	internal var sessionConfiguration: URLSessionConfiguration
 	public var session: URLSession
 	internal var request: URLRequest
+	public var postData: Data?
 
 	/// Primary initializer
 	override public init() {
@@ -79,7 +85,7 @@ public class HTTP: NSObject {
 			Log.debug("SET \(urlString.rstrip)")
 			if let url = URL(string:urlString.rstrip) {
 				self.request = URLRequest(url:url)
-				self.request.addValue(HTTPUserAgentKey.iOS.rawValue, forHTTPHeaderField: HTTPHeaderKey.userAgent.rawValue)
+				self.request.setValue(HTTPUserAgentKey.iOS.rawValue, forHTTPHeaderField: HTTPHeaderKey.userAgent.rawValue)
 			} else {
 				Log.error(NSError.error("Unable to parse url \(urlString)"))
 			}
@@ -114,18 +120,26 @@ public class HTTP: NSObject {
 		}
 	}
 
+	/// Request host target as a String
+	public var host: String {
+		set(host) {
+			Log.debug(host)
+			self.request.setValue(host, forHTTPHeaderField: HTTPHeaderKey.host.rawValue)
+		}
+		get {
+			guard let hostString = self.request.value(forHTTPHeaderField: HTTPHeaderKey.host.rawValue) else {
+				return ""
+			}
+			
+			return hostString
+		}
+	}
+
 	/// Request content type as an HTTPMIMEKey
 	public var contentType: HTTPMIMEKey {
 		set(contentType) {
 			Log.debug(contentType.rawValue)
-			switch contentType {
-			case .json:
-				self.request.addValue(contentType.rawValue, forHTTPHeaderField: HTTPHeaderKey.contentType.rawValue)
-				self.request.addValue(contentType.rawValue, forHTTPHeaderField: HTTPHeaderKey.accept.rawValue)
-			default:
-				self.request.addValue(HTTPMIMEKey.html.rawValue, forHTTPHeaderField: HTTPHeaderKey.contentType.rawValue)
-				self.request.addValue(HTTPMIMEKey.html.rawValue, forHTTPHeaderField: HTTPHeaderKey.accept.rawValue)
-			}
+			self.request.setValue(contentType.rawValue, forHTTPHeaderField: HTTPHeaderKey.contentType.rawValue)
 		}
 		get {
 			guard let mimeKey = self.request.value(forHTTPHeaderField: HTTPHeaderKey.contentType.rawValue) else {
@@ -141,11 +155,21 @@ public class HTTP: NSObject {
 		}
 	}
 
+	/// Request content length as an Int
+	public var contentLength: Int {
+		get {
+			guard let data = self.postData else {
+				return 0
+			}
+			return data.count
+		}
+	}
+
 	/// Request method as an HTTPMethodKey
 	public var userAgent: HTTPUserAgentKey {
 		set(userAgent) {
 			Log.debug(userAgent.rawValue)
-			self.request.addValue(userAgent.rawValue, forHTTPHeaderField: HTTPHeaderKey.userAgent.rawValue)
+			self.request.setValue(userAgent.rawValue, forHTTPHeaderField: HTTPHeaderKey.userAgent.rawValue)
 		}
 		get {
 			guard let userAgent = self.request.value(forHTTPHeaderField: HTTPHeaderKey.userAgent.rawValue) else {
@@ -166,6 +190,30 @@ public class HTTP: NSObject {
 			}
 		}
 	}
+
+	/// Setup a standard request
+	private func standardSetup() {
+		Log.stamp()
+		
+		self.contentType = .html
+		
+		self.request.cachePolicy = .reloadIgnoringLocalCacheData
+		self.request.httpShouldHandleCookies = false
+		self.request.timeoutInterval = 60
+		
+		self.request.setValue("close", forHTTPHeaderField: "Connection")
+		self.request.setValue("1", forHTTPHeaderField: "Upgrade-Insecure-Requests")
+		self.request.setValue("1", forHTTPHeaderField: "Dnt")
+		self.request.setValue("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", forHTTPHeaderField: HTTPHeaderKey.accept.rawValue)
+		self.request.setValue("en-us", forHTTPHeaderField: HTTPHeaderKey.acceptLanguage.rawValue)
+		self.request.setValue("gzip, deflate", forHTTPHeaderField: HTTPHeaderKey.acceptEncoding.rawValue)
+
+		#if os(iOS)
+		self.userAgent = .iOS
+		#else
+		self.userAgent = .macOS
+		#endif
+}
 
 	/// Description
 	///
@@ -220,7 +268,13 @@ public class HTTP: NSObject {
 		self.method = .post
 
 		let postData = JSON.encodeAsData(json)
-		let uploadTask = session.uploadTask(with: request, from: postData!)
+		let uploadTask = session.uploadTask(with: request, from: postData!) { (data: Data?, response: URLResponse?, err: Error?) in
+			if let error = err {
+				Log.debug(error)
+			} else {
+				Log.debug(data)
+			}
+		}
 
 		uploadTask.resume()
 	}
