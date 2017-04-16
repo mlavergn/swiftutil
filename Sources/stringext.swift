@@ -92,6 +92,25 @@ public extension String {
 	/// Extracts a substring from start to the given to offset
 	///
 	/// - Parameters:
+	///   - from: characters index as an Int marking the start of substring,
+	///						if a negative value, index is from the end of the string
+	/// - Returns: substring as a String
+	public func substring(from: Int) -> String {
+		var range: Range<Index>?
+		if from >= 0 {
+			let start = self.index(self.startIndex, offsetBy:from)
+			range = start..<self.endIndex
+		} else {
+			let start = self.index(self.endIndex, offsetBy:from)
+			range = start..<self.endIndex
+		}
+		
+		return self.substring(with: range!)
+	}
+
+	/// Extracts a substring from start to the given to offset
+	///
+	/// - Parameters:
 	///   - to: characters index as an Int marking the end of substring
 	/// - Returns: substring as a String
 	public func substring(to: Int) -> String {
