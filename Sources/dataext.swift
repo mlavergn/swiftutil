@@ -16,4 +16,16 @@ public extension Data {
 			self.append(data)
 		}
 	}
+
+	
+	/// Converts a Data to a UTF8 String if possible
+	///
+	/// - Returns: String if convertible, otherwise empty String
+	public func string() -> String {
+		guard let result = String.init(data: self) else {
+			return ""
+		}
+		
+		return result
+	}
 }
