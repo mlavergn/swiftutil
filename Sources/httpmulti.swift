@@ -24,7 +24,7 @@ public class HTTPMulti: HTTP {
 		if self.postData == nil {
 			self.postData = Data()
 		}
-		
+
 		let marker = "\r\n--\(self.boundary)\r\nContent-Disposition: form-data; name=\"\(name)\"\r\n\r\n"
 		self.postData!.appendString(marker)
 		self.postData!.appendString(text)
@@ -35,14 +35,27 @@ public class HTTPMulti: HTTP {
 		if self.postData == nil {
 			self.postData = Data()
 		}
-		
+
 		let marker: String = "\r\n--\(self.boundary)\r\nContent-Disposition: form-data; name=\"\(name)\"; filename=\"\(filename)\"\r\n" +
 		"\(HTTPHeaderKey.contentType.rawValue): \(HTTPMIMEKey.bin.rawValue)\r\n\r\n"
 		self.postData!.appendString(marker)
 		self.postData!.append(binary)
 	}
 
-	public func postParts(urlString: String) {
+	public func addJSONPart(name: String, json: [String: Any]) {
+		Log.stamp()
+		if self.postData == nil {
+			self.postData = Data()
+		}
+
+		if let jsonString = JSON.encodeAsString(json) {
+			let marker = "\r\n--\(self.boundary)\r\nContent-Disposition: form-data; name=\"\(name)\"\r\n\r\n"
+			self.postData!.appendString(marker)
+			self.postData!.appendString(jsonString)
+		}
+	}
+
+	public func postMultiPart(urlString: String) {
 		Log.stamp()
 		self.urlString = urlString
 

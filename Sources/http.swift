@@ -130,7 +130,7 @@ public class HTTP: NSObject {
 			guard let hostString = self.request.value(forHTTPHeaderField: HTTPHeaderKey.host.rawValue) else {
 				return ""
 			}
-			
+
 			return hostString
 		}
 	}
@@ -157,12 +157,10 @@ public class HTTP: NSObject {
 
 	/// Request content length as an Int
 	public var contentLength: Int {
-		get {
-			guard let data = self.postData else {
-				return 0
-			}
-			return data.count
+		guard let data = self.postData else {
+			return 0
 		}
+		return data.count
 	}
 
 	/// Request method as an HTTPMethodKey
@@ -194,13 +192,13 @@ public class HTTP: NSObject {
 	/// Setup a standard request
 	private func standardSetup() {
 		Log.stamp()
-		
+
 		self.contentType = .html
-		
+
 		self.request.cachePolicy = .reloadIgnoringLocalCacheData
 		self.request.httpShouldHandleCookies = false
 		self.request.timeoutInterval = 60
-		
+
 		self.request.setValue("close", forHTTPHeaderField: "Connection")
 		self.request.setValue("1", forHTTPHeaderField: "Upgrade-Insecure-Requests")
 		self.request.setValue("1", forHTTPHeaderField: "Dnt")

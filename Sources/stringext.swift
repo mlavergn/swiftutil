@@ -104,7 +104,7 @@ public extension String {
 			let start = self.index(self.endIndex, offsetBy:from)
 			range = start..<self.endIndex
 		}
-		
+
 		return self.substring(with: range!)
 	}
 
