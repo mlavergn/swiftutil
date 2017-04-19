@@ -11,6 +11,7 @@ public class GPS: NSObject, CLLocationManagerDelegate {
 	var coordinates = CLLocationCoordinate2D()
 	var requests = 0
 
+	/// Starts the location manager updates
 	private func activateLocationManager() {
 		Log.stamp()
 
@@ -32,6 +33,7 @@ public class GPS: NSObject, CLLocationManagerDelegate {
 		}
 	}
 
+	/// Stops the location manager updates
 	private func deactivateLocationManager() {
 		Log.stamp()
 		self.requests -= 1
@@ -59,6 +61,8 @@ public class GPS: NSObject, CLLocationManagerDelegate {
 		Log.debug(self.zipCode)
 	}
 
+	/// Obtains the device location ZIP code as a String
+	/// NOTE: Supports US and Canada cleanly.
 	public var zipCode: String {
 		self.activateLocationManager()
 
