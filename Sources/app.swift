@@ -4,6 +4,9 @@
 /// - copyright: 2017 Marc Lavergne. All rights reserved.
 /// - license: MIT
 import Foundation
+#if os(iOS)
+import UIKit
+#endif
 
 // MARK: - App struct
 public struct App {
@@ -38,5 +41,19 @@ public struct App {
 			plist[key] = value
 			plist.write(toFile: path!, atomically: true)
 		}
+	}
+
+	/// Change the app icon to the named plist icon, use nil for default icon
+	/// http://stackoverflow.com/questions/43097604/alternate-icon-in-ios-10-3
+	private static func updateIcon(name: String?) {
+		#if os(iOS)
+		if #available(iOS 10.3, *) {
+			if UIApplication.shared.supportsAlternateIcons {
+				UIApplication.shared.setAlternateIconName(name) { (err: Error?) in
+					Log.error(err)
+				}
+			}
+		}
+		#endif
 	}
 }
