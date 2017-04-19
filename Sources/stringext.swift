@@ -174,4 +174,10 @@ public extension String {
 	public var reversed: String {
 		return String(self.characters.reversed())
 	}
+
+	/// Reverses the calling string
+	public var removeLastPathComponent: String {
+		let nsstring = NSString.init(string: self)
+		return nsstring.deletingLastPathComponent
+	}
 }

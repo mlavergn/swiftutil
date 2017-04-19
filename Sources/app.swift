@@ -25,4 +25,18 @@ public struct App {
 			return "0"
 		}
 	}
+
+	/// Set a key value pair in the application plist
+	///
+	/// - Parameters:
+	///   - value: value as an Any
+	///   - key: plist key as a String
+	public static func setPlistKey(value: String, key: Any) {
+		let path = Bundle.main.path(forResource: "Info", ofType: "plist")
+		Log.debug(path)
+		if let plist = NSMutableDictionary.init(contentsOfFile: path!) {
+			plist[key] = value
+			plist.write(toFile: path!, atomically: true)
+		}
+	}
 }
