@@ -50,7 +50,9 @@ public struct App {
 		if #available(iOS 10.3, *) {
 			if UIApplication.shared.supportsAlternateIcons {
 				UIApplication.shared.setAlternateIconName(name) { (err: Error?) in
-					Log.error(err)
+					if err != nil {
+						Log.error(err!)
+					}
 				}
 			}
 		}
