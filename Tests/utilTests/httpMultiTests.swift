@@ -9,22 +9,26 @@ class httpMultiTests: XCTestCase {
 		
 		var blob: Data?
 		
-		if let url: URL = Bundle.main.url(forResource: "golang", withExtension: "png") {
-			print(url)
+		
+		if !App.isSandboxed {
+			guard var url = URL(string:"file://" + FileManager.default.currentDirectoryPath) else {
+				XCTAssertFalse(true, "unable to obtain current working directory")
+				return
+			}
+			url.appendPathComponent("Tests/mayhem.jpg")
 			try! blob = Data.init(contentsOf: url)
+		} else {
+			blob = Images.imageToData(name: "mayhem.jpg")
 		}
 		
-		//httpm.test(imageData: blob!)
+		XCTAssertFalse(blob == nil || blob!.count == 0, "Could not load image")
 		
-		//httpm.addTextPart(name: "metadata", text: "{\"file\": \"foo.png\"}")
-		//httpm.addTextPart(name: "metadata2", text: "{\"file\": \"foo2.png\"}")
-		httpm.addJSONPart(name: "meta", json: ["filename": "foo.jpg"])
+		httpm.addJSONPart(name: "meta", json: ["filename": "mayhemJ.jpg"])
 		
-		httpm.addBinaryPart(name: "upload", filename: "test.jpg", binary: blob!)
+		httpm.addBinaryPart(name: "upload", filename: "mayhemB.jpg", binary: blob!)
 		
-		httpm.postMultiPart(urlString: "http://127.0.0.1:8080/upload")
-		
-		XCTAssertNotNil(httpm)
+		let json = httpm.postMultiPart(urlString: "http://127.0.0.1:8080/upload")
+		XCTAssertNotNil(json)
 	}
 	
 	static var allTests : [(String, (httpMultiTests) -> () throws -> Void)] {
