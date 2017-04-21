@@ -55,7 +55,7 @@ public class HTTPMulti: HTTP {
 		}
 	}
 
-	public func postMultiPart(urlString: String) {
+	public func postMultiPart(urlString: String) -> [String: Any] {
 		Log.stamp()
 		self.urlString = urlString
 
@@ -74,14 +74,23 @@ public class HTTPMulti: HTTP {
 		let cLen = String(self.contentLength)
 		self.request.setValue(cLen, forHTTPHeaderField: HTTPHeaderKey.contentLength.rawValue)
 
+		var result: [String: AnyObject]? = nil
+		let cndlock = NSConditionLock(condition: 0)
+
 		let uploadTask = session.uploadTask(with: request, from: self.postData!) { (data: Data?, response: URLResponse?, err: Error?) in
 			if let error = err {
-				Log.debug(error)
+				Log.error(error)
+				result = [:]
 			} else {
-				Log.debug(data)
+				result = JSON.decodeData(data!)
+				Log.debug(result)
 			}
+			cndlock.unlock(withCondition: 1)
 		}
-
 		uploadTask.resume()
+		cndlock.lock(whenCondition:1, before: NSDate.distantFuture)
+		cndlock.unlock(withCondition: 0)
+
+		return result!
 	}
 }

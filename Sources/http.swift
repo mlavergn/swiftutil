@@ -75,7 +75,7 @@ public class HTTP: NSObject {
 	override public init() {
 		self.sessionConfiguration = URLSessionConfiguration.default
 		self.session = URLSession(configuration:sessionConfiguration)
-		self.request = URLRequest(url:URL(string:"http://127.0.0.2")!)
+		self.request = URLRequest(url:URL(string:"http://127.0.0.1")!)
 		super.init()
 	}
 
@@ -259,22 +259,31 @@ public class HTTP: NSObject {
 	/// - Parameters:
 	///   - urlString: url as a String
 	///   - json: payload of type String
-	public func postJSON(urlString: String, json: [String: Any]) {
+	public func postJSON(urlString: String, json: [String: Any]) -> [String: Any] {
 		Log.stamp()
 		self.urlString = urlString
 		self.contentType = .json
 		self.method = .post
 
+		var result: [String: AnyObject]? = nil
+		let cndlock = NSConditionLock(condition: 0)
+
 		let postData = JSON.encodeAsData(json)
 		let uploadTask = session.uploadTask(with: request, from: postData!) { (data: Data?, response: URLResponse?, err: Error?) in
-			if let error = err {
-				Log.debug(error)
+			if let err = err {
+				Log.error(err)
+				result = [:]
 			} else {
-				Log.debug(data)
+				result = JSON.decodeData(data!)
+				Log.debug(result)
 			}
+			cndlock.unlock(withCondition: 1)
 		}
-
 		uploadTask.resume()
+		cndlock.lock(whenCondition:1, before: NSDate.distantFuture)
+		cndlock.unlock(withCondition: 0)
+
+		return result!
 	}
 
 	/// Description
@@ -292,17 +301,14 @@ public class HTTP: NSObject {
 
 		let downloadTask = session.downloadTask(with: request) { (url: URL?, response: URLResponse?, err: Error?) in
 			cndlock.lock()
-			if let url = url {
-				Log.debug(url.absoluteString)
+			if let err = err {
+				Log.error(err)
+				result = ["": 0 as AnyObject]
+			} else {
 				// contents is in a file URL
-				let payload = URLFetch.fetchDataContents(url.absoluteString)
+				let payload = URLFetch.fetchDataContents(url!.absoluteString)
 				result = JSON.decodeData(payload.0)
 				Log.debug(result)
-			} else {
-				if err != nil {
-					Log.error(err!)
-					result = ["": 0 as AnyObject]
-				}
 			}
 			cndlock.unlock(withCondition: 1)
 		}
