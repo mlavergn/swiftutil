@@ -78,14 +78,17 @@ public class HTTPMulti: HTTP {
 		let cndlock = NSConditionLock(condition: 0)
 
 		let uploadTask = session.uploadTask(with: request, from: self.postData!) { (data: Data?, response: URLResponse?, err: Error?) in
+			cndlock.lock()
+			defer {cndlock.unlock(withCondition: 1)}
 			if let error = err {
 				Log.error(error)
 				result = [:]
 			} else {
-				result = JSON.decodeData(data!)
-				Log.debug(result)
+				if let data = data {
+					result = JSON.decodeData(data)
+					Log.debug(result)
+				}
 			}
-			cndlock.unlock(withCondition: 1)
 		}
 		uploadTask.resume()
 		cndlock.lock(whenCondition:1, before: NSDate.distantFuture)

@@ -229,6 +229,7 @@ public class HTTP: NSObject {
 
 		let downloadTask = session.downloadTask(with: request) { (url: URL?, response: URLResponse?, err: Error?) in
 			cndlock.lock()
+			defer {cndlock.unlock(withCondition: 1)}
 			if let url = url {
 				// contents is in a file URL
 				Log.debug(url.absoluteString)
@@ -270,6 +271,8 @@ public class HTTP: NSObject {
 
 		let postData = JSON.encodeAsData(json)
 		let uploadTask = session.uploadTask(with: request, from: postData!) { (data: Data?, response: URLResponse?, err: Error?) in
+			cndlock.lock()
+			defer {cndlock.unlock(withCondition: 1)}
 			if let err = err {
 				Log.error(err)
 				result = [:]
@@ -277,7 +280,6 @@ public class HTTP: NSObject {
 				result = JSON.decodeData(data!)
 				Log.debug(result)
 			}
-			cndlock.unlock(withCondition: 1)
 		}
 		uploadTask.resume()
 		cndlock.lock(whenCondition:1, before: NSDate.distantFuture)
@@ -301,6 +303,7 @@ public class HTTP: NSObject {
 
 		let downloadTask = session.downloadTask(with: request) { (url: URL?, response: URLResponse?, err: Error?) in
 			cndlock.lock()
+			defer {cndlock.unlock(withCondition: 1)}
 			if let err = err {
 				Log.error(err)
 				result = ["": 0 as AnyObject]
@@ -310,7 +313,6 @@ public class HTTP: NSObject {
 				result = JSON.decodeData(payload.0)
 				Log.debug(result)
 			}
-			cndlock.unlock(withCondition: 1)
 		}
 		downloadTask.resume()
 		cndlock.lock(whenCondition:1, before: NSDate.distantFuture)
