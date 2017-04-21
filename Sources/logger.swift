@@ -72,6 +72,26 @@ public struct Log {
 		logDestination = destination
 	}
 
+	/// Read logger environment variables and adjust settings
+	public static func readEnv() {
+		// (todo) this should be read via a timer
+		if let value = ProcessInfo.processInfo.environment["LOG_LEVEL"] {
+			if let valInt = Int(value) {
+				if valInt >= LogLevel.ALL.rawValue && valInt <= LogLevel.OFF.rawValue {
+					logLevel = LogLevel(rawValue: valInt)!
+				}
+			}
+		}
+
+		if let value = ProcessInfo.processInfo.environment["LOG_DEST"] {
+			if let valInt = Int(value) {
+				if valInt >= LogDestination.STDOUT.rawValue && valInt <= LogDestination.SYSTEM.rawValue {
+					logDestination = LogDestination(rawValue: valInt)!
+				}
+			}
+		}
+	}
+
 	/// Outputs a log message to the set destination
 	///
 	/// - Parameter message: description as a String
