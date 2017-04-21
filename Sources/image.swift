@@ -94,7 +94,7 @@ public struct Images {
 	///   - name: image name as String
 	///   - compression: compression factor for JPEG
 	/// - Returns: Data optional with JPEG representaiton
-	public static func imageToData(name: String, compression: Float) -> Data? {
+	public static func imageToData(name: String, compression: Float = 0.8) -> Data? {
 		var data: Data? = nil
 		#if os(iOS)
 			if var image = UIImage(named:name) {
@@ -120,7 +120,7 @@ public struct Images {
 	///   - name: image as UIImage / NSImage
 	///   - compression: compression factor for JPEG
 	/// - Returns: Data optional with JPEG representaiton
-	public static func imageToData(image: Image, compression: Float) -> Data? {
+	public static func imageToData(image: Image, compression: Float = 0.8) -> Data? {
 		var data: Data? = nil
 		let compression = 0.8
 		#if os(iOS)
