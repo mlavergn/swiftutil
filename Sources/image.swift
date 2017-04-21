@@ -8,9 +8,11 @@ import Foundation
 #if os(iOS)
 import UIKit
 import ImageIO
+public typealias Image = UIImage
 #elseif os(macOS)
 import AppKit
 import Cocoa
+public typealias Image = NSImage
 #endif
 
 public struct Images {
@@ -107,6 +109,25 @@ public struct Images {
 				// resize to some factor (compression only)
 				data = imageRep.representation(using: .JPEG, properties: [NSImageCompressionFactor: compression])
 			}
+		#endif
+
+		return data
+	}
+
+	/// Obtain the JPEG Data of the given Image
+	///
+	/// - Parameters:
+	///   - name: image as UIImage / NSImage
+	///   - compression: compression factor for JPEG
+	/// - Returns: Data optional with JPEG representaiton
+	public static func imageToData(image: Image, compression: Float) -> Data? {
+		var data: Data? = nil
+		let compression = 0.8
+		#if os(iOS)
+			data = UIImageJPEGRepresentation(image, CGFloat(compression))
+		#elseif os(macOS)
+			let imageRep = NSBitmapImageRep(data:image.tiffRepresentation!)!
+			data = imageRep.representation(using: .JPEG, properties: [NSImageCompressionFactor: compression])
 		#endif
 
 		return data
