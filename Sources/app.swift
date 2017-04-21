@@ -58,4 +58,24 @@ public struct App {
 		}
 		#endif
 	}
+
+	/// Bool with true if the application running in a sandbox, otherwise false
+	public static var isSandboxed: Bool {
+		let dir = NSHomeDirectory()
+		if let bundleName: String = Bundle.main.bundleIdentifier {
+			if dir.contains("/containers/" + bundleName) {
+				return true
+			}
+		}
+		return false
+	}
+
+	/// Bool with true if the application running in a simulator, otherwise false
+	public static var isSimulator: Bool {
+		let cwdPath = FileManager.default.currentDirectoryPath
+		if cwdPath.contains("/CoreSimulator/") {
+			return true
+		}
+		return false
+	}
 }
