@@ -38,3 +38,10 @@ ios:
 	rm -rf iosBuild iosBuild.swiftdoc
 	mkdir -p iosBuild
 	swiftc -I $(INCL_PATH) -F $(LIB_PATH) -target $(TARGET) -sdk $(SDK_PATH) -emit-module  -emit-module-path iosBuild -module-name $(MODULE) -framework Foundation -framework AVFoundation Sources/*.swift
+
+tag: TAG :=  0.0.1
+tag:
+	git tag -d $(TAG)
+	git push origin :refs/tags/$(TAG)
+	git tag -a $(TAG) -m "Release version $(TAG)"
+	git push origin master --tags
