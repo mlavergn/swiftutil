@@ -79,11 +79,27 @@ public class HTTP: NSObject {
 		super.init()
 	}
 
+	/// Add a sticky HTTP header
+	///
+	/// - Parameters:
+	///   - name: header name as a String
+	///   - value: header value as a String
+	public func setHeader(name: String, value: String) {
+		if var current = self.sessionConfiguration.httpAdditionalHeaders {
+			current[name] = value
+		} else {
+			self.sessionConfiguration.httpAdditionalHeaders = [name: value]
+		}
+
+		self.session = URLSession(configuration:sessionConfiguration)
+	}
+
 	/// Request URL as a String
 	public var urlString: String {
 		set(urlString) {
-			Log.debug("SET \(urlString.rstrip)")
-			if let url = URL(string:urlString.rstrip) {
+			let urlScrubbed = urlString.rstrip
+			Log.debug(urlScrubbed)
+			if let url = URL(string:urlScrubbed) {
 				self.request = URLRequest(url:url)
 				self.request.setValue(HTTPUserAgentKey.iOS.rawValue, forHTTPHeaderField: HTTPHeaderKey.userAgent.rawValue)
 			} else {
