@@ -1,7 +1,7 @@
 import XCTest
 @testable import Util
 
-class appTests: XCTestCase {
+class AppTests: XCTestCase {
 
 	func testBundleId() {
 		let x = App.bundleId
@@ -13,9 +13,9 @@ class appTests: XCTestCase {
 		XCTAssertEqual(x, "0")
 	}
 
-	static var allTests : [(String, (appTests) -> () throws -> Void)] {
+	static var allTests: [(String, (AppTests) -> () throws -> Void)] {
 		return [
-			("testBundleId", testBundleId),
+			("testBundleId", testBundleId)
 		]
 	}
 }

@@ -1,6 +1,7 @@
 # https://github.com/realm/SwiftLint
 included:
   - Sources
+  - Tests
 type_name:
   min_length: 2
 variable_name:

@@ -1,18 +1,16 @@
 import XCTest
 @testable import Util
 
-class httpTests: XCTestCase {
-	
+class HTTPTests: XCTestCase {
 	func testHttp() {
 		let http = HTTP()
 		let content = http.getHTML(urlString: "http://iot.reqly.com")
-		
 		XCTAssertNotNil(content)
 	}
-	
-	static var allTests : [(String, (httpTests) -> () throws -> Void)] {
+
+	static var allTests: [(String, (HTTPTests) -> () throws -> Void)] {
 		return [
-			("testHttpMulti", testHttp),
+			("testHttpMulti", testHttp)
 		]
 	}
 }
