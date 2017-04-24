@@ -4,7 +4,7 @@ included:
   - Tests
 type_name:
   min_length: 2
-variable_name:
+identifier_name:
   min_length:
     warning: 2
 line_length: 180

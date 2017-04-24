@@ -61,11 +61,9 @@ public class Video: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
 		#if os(iOS)
 			if let ddSession = AVCaptureDeviceDiscoverySession.init(deviceTypes: [AVCaptureDeviceType.builtInWideAngleCamera], mediaType: AVMediaTypeVideo,
 			                                                        position: AVCaptureDevicePosition.front) {
-				for device: AVCaptureDevice in ddSession.devices {
-					if device.position == AVCaptureDevicePosition.front {
-						captureDevice = device
-						break
-					}
+				for device: AVCaptureDevice in ddSession.devices where device.position == AVCaptureDevicePosition.front {
+					captureDevice = device
+					break
 				}
 			}
 		#else
