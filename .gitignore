@@ -3,3 +3,5 @@
 *.xcodeproj
 *.playground
 xcuserdata
+Package.pins
+iosBuild*

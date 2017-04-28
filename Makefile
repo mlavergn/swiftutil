@@ -10,6 +10,7 @@ LINKER_OPTS := -Xlinker -lUtil
 all: build
 
 build:
+	swift package update
 	swift build $(SWIFTC_OPTS) $(LINKER_OPTS) 
 
 test:
@@ -37,7 +38,7 @@ MODULE    := Util
 ios:
 	rm -rf iosBuild iosBuild.swiftdoc
 	mkdir -p iosBuild
-	swiftc -I $(INCL_PATH) -F $(LIB_PATH) -target $(TARGET) -sdk $(SDK_PATH) -emit-module  -emit-module-path iosBuild -module-name $(MODULE) -framework Foundation -framework AVFoundation Sources/*.swift
+	swiftc -I $(INCL_PATH) -F $(LIB_PATH) -target $(TARGET) -sdk $(SDK_PATH) -o iosBuild/libUtil.dylib -emit-library -emit-module -emit-module-path iosBuild -module-name $(MODULE) -framework Foundation -framework AVFoundation Sources/*.swift
 
 tag: TAG :=  0.0.1
 tag:
