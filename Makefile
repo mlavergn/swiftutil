@@ -19,6 +19,7 @@ test:
 clean:
 	swift package clean
 	rm -rf .build
+	rm -f Package.pins
 	rm -rf iosBuild iosBuild.swiftdoc
 
 lint:
