@@ -14,7 +14,7 @@ public class Camera: NSObject, UINavigationControllerDelegate, UIImagePickerCont
 	public var imagePickerController: UIImagePickerController?
 	public var image: UIImage?
 
-	public func present(controller: UIViewController) {
+	public func present(controller: UIViewController, inline: Bool = false) {
 		imagePickerController = UIImagePickerController()
 		if imagePickerController != nil {
 			imagePickerController!.delegate = self
@@ -22,9 +22,11 @@ public class Camera: NSObject, UINavigationControllerDelegate, UIImagePickerCont
 			imagePickerController!.sourceType = UIImagePickerControllerSourceType.camera
 			imagePickerController!.cameraCaptureMode = UIImagePickerControllerCameraCaptureMode.photo
 
-			imagePickerController!.showsCameraControls = false
-			imagePickerController!.setNavigationBarHidden(true, animated: true)
-			imagePickerController!.setToolbarHidden(true, animated: true)
+			if inline {
+				imagePickerController!.showsCameraControls = false
+				imagePickerController!.setNavigationBarHidden(true, animated: true)
+				imagePickerController!.setToolbarHidden(true, animated: true)
+			}
 
 			imagePickerController!.edgesForExtendedLayout = .all
 
