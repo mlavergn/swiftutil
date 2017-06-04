@@ -1,4 +1,4 @@
-/// Video class that encapsulates iOS / macOS camera access
+/// Video class that encapsulates iOS / macOS video capture
 ///
 /// - author: Marc Lavergne <mlavergn@gmail.com>
 /// - copyright: 2017 Marc Lavergne. All rights reserved.
@@ -6,7 +6,7 @@
 import Foundation
 
 #if os(iOS)
-	import UIKit
+import UIKit
 #endif
 
 import AVFoundation
