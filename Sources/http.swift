@@ -276,7 +276,7 @@ public class HTTP: NSObject {
 	/// - Parameters:
 	///   - urlString: url as a String
 	///   - json: payload of type String
-	public func postJSON(urlString: String, json: [String: Any]) -> [String: Any] {
+	public func postJSON(urlString: String, json: [String: Any]) -> [String: Any]? {
 		Log.stamp()
 		self.urlString = urlString
 		self.contentType = .json
@@ -301,14 +301,14 @@ public class HTTP: NSObject {
 		cndlock.lock(whenCondition:1, before: NSDate.distantFuture)
 		cndlock.unlock(withCondition: 0)
 
-		return result!
+		return result
 	}
 
 	/// Description
 	///
 	/// - Parameter urlString: url as a String
 	/// - Returns: deserialized JSON payload as a dictionary
-	public func getJSON(urlString: String) -> [String: Any] {
+	public func getJSON(urlString: String) -> [String: Any]? {
 		Log.stamp()
 		self.urlString = urlString
 		self.contentType = .json
@@ -334,6 +334,6 @@ public class HTTP: NSObject {
 		cndlock.lock(whenCondition:1, before: NSDate.distantFuture)
 		cndlock.unlock(withCondition: 0)
 
-		return result!
+		return result
 	}
 }
