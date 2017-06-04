@@ -45,7 +45,7 @@ public struct Images {
 			sizedImage.lockFocus()
 
 			let rect = CGRect(origin:CGPoint.zero, size:size)
-			image.draw(in:rect, from:NSRect.zero, operation:NSCompositeSourceOver, fraction:1.0)
+			image.draw(in:rect, from:NSRect.zero, operation:NSCompositingOperation.sourceOver, fraction:1.0)
 
 			sizedImage.unlockFocus()
 		}
