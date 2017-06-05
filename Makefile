@@ -11,7 +11,7 @@ all: build
 
 build:
 	swift package update
-	swift build $(SWIFTC_OPTS) $(LINKER_OPTS) 
+	swift build $(SWIFTC_OPTS) $(LINKER_OPTS) --build-path=macosBuild
 
 test:
 	swift test $(SWIFTC_OPTS) $(LINKER_OPTS) 
@@ -19,6 +19,8 @@ test:
 clean:
 	swift package clean
 	rm -rf .build
+	rm -rf iosBuild
+	rm -rf macosBuild
 	rm -f Package.pins
 	rm -rf iosBuild iosBuild.swiftdoc
 
@@ -27,6 +29,9 @@ lint:
 
 xc:
 	swift package generate-xcodeproj
+
+xcbuild:
+	xcodebuild -workspace Util.xcworkspace -scheme macOSUtil -configuration Debug -destination 'platform=macOS,arch=x86_64' BUILD_DIR=macosBuild
 
 SYS_PATH  := /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform
 INCL_PATH := $(SYS_PATH)/Developer/SDKs/iPhoneOS.sdk/usr/include
