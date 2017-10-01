@@ -35,7 +35,7 @@ public class Video: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
 		return captureOutput
 	}
 
-	public func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
+	public func captureOutput(_: AVCaptureOutput, didOutputSampleBuffer sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
 		let pixelBuffer: CVPixelBuffer? = CMSampleBufferGetImageBuffer(sampleBuffer)
 		if let pixelBuffer = pixelBuffer {
 			if CVPixelBufferLockBaseAddress(pixelBuffer, CVPixelBufferLockFlags.readOnly) == kCVReturnSuccess {
@@ -59,12 +59,11 @@ public class Video: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
 	public var captureDevice: AVCaptureDevice? {
 		var captureDevice: AVCaptureDevice?
 		#if os(iOS)
-			if let ddSession = AVCaptureDeviceDiscoverySession.init(deviceTypes: [AVCaptureDeviceType.builtInWideAngleCamera], mediaType: AVMediaTypeVideo,
-			                                                        position: AVCaptureDevicePosition.front) {
-				for device: AVCaptureDevice in ddSession.devices where device.position == AVCaptureDevicePosition.front {
-					captureDevice = device
-					break
-				}
+			let ddSession = AVCaptureDevice.DiscoverySession.init(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video,
+			                                                        position: AVCaptureDevice.Position.front)
+			for device: AVCaptureDevice in ddSession.devices where device.position == AVCaptureDevice.Position.front {
+				captureDevice = device
+				break
 			}
 		#else
 			captureDevice = AVCaptureDevice.defaultDevice(withMediaType:AVMediaTypeVideo)

@@ -84,9 +84,11 @@ public extension String {
 	public func substring(from: Int, to: Int) -> String {
 		let start = self.index(self.startIndex, offsetBy:from)
 		let end = self.index(self.startIndex, offsetBy:to)
-		let range = start..<end
 
-		return self.substring(with: range)
+		return String(self[start..<end])
+		// swift 3
+		// let range = start..<end
+		// return self.substring(with: range)
 	}
 
 	/// Extracts a substring from start to the given to offset
@@ -96,16 +98,18 @@ public extension String {
 	///						if a negative value, index is from the end of the string
 	/// - Returns: substring as a String
 	public func substring(from: Int) -> String {
-		var range: Range<Index>?
+		var start = self.startIndex
 		if from >= 0 {
-			let start = self.index(self.startIndex, offsetBy:from)
-			range = start..<self.endIndex
+			start = self.index(self.startIndex, offsetBy:from)
 		} else {
-			let start = self.index(self.endIndex, offsetBy:from)
-			range = start..<self.endIndex
+			start = self.index(self.endIndex, offsetBy:from)
 		}
 
-		return self.substring(with: range!)
+		return String(self[start...])
+		// swift 3
+		// let range: Range<Index>?
+		// range = start..<self.endIndex
+		// return self.substring(with: range!)
 	}
 
 	/// Extracts a substring from start to the given to offset

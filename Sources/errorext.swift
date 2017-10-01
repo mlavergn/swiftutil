@@ -29,9 +29,9 @@ extension NSError {
 	public static func error(_ message: String = "", function: String = #function, file: String = #file, line: Int = #line) -> NSError {
 		let customError = NSError(domain: App.bundleId, code: 0, userInfo: [
 				NSLocalizedDescriptionKey: message,
-				ErrorKey.function: function,
-				ErrorKey.file: file,
-				ErrorKey.line: line
+				ErrorKey.function.rawValue: function,
+				ErrorKey.file.rawValue: file,
+				ErrorKey.line.rawValue: line
 			])
 
 		return customError
