@@ -46,7 +46,7 @@ public extension String {
 
 	/// Length of the String
 	public var length: Int {
-		return self.characters.count
+		return self.count
 	}
 
 	/// Trims leading and trailing whitespace
@@ -156,7 +156,7 @@ public extension String {
 			}
 			drop += 1
 		}
-		return String(self.characters.dropFirst(drop))
+		return String(self.dropFirst(drop))
 	}
 
 	/// Right trims whitespace characters
@@ -171,12 +171,12 @@ public extension String {
 			}
 			drop += 1
 		}
-		return String(self.characters.dropLast(drop))
+		return String(self.dropLast(drop))
 	}
 
 	/// Reverses the calling string
 	public var reversed: String {
-		return String(self.characters.reversed())
+		return String(self.reversed())
 	}
 
 	/// Reverses the calling string

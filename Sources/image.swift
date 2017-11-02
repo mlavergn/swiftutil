@@ -97,17 +97,17 @@ public struct Images {
 	public static func imageToData(name: String, compression: Float = 0.8) -> Data? {
 		var data: Data? = nil
 		#if os(iOS)
-			if var image = UIImage(named:name) {
+			if var image = UIImage(named: name) {
 				image = resize(image: image) as UIImage!
 				data = UIImageJPEGRepresentation(image, CGFloat(compression))
 			}
 		#elseif os(macOS)
-			if var image = NSImage(named:name) {
+            if var image = NSImage(named: NSImage.Name(rawValue: name)) {
 				image = resize(image: image) as NSImage!
-				let imageRep = NSBitmapImageRep(data:image.tiffRepresentation!)!
+				let imageRep = NSBitmapImageRep(data: image.tiffRepresentation!)!
 
 				// resize to some factor (compression only)
-				data = imageRep.representation(using: .JPEG, properties: [NSImageCompressionFactor: compression])
+				data = imageRep.representation(using: .jpeg, properties: [NSBitmapImageRep.PropertyKey.compressionFactor: compression])
 			}
 		#endif
 
@@ -126,8 +126,8 @@ public struct Images {
 		#if os(iOS)
 			data = UIImageJPEGRepresentation(image, CGFloat(compression))
 		#elseif os(macOS)
-			let imageRep = NSBitmapImageRep(data:image.tiffRepresentation!)!
-			data = imageRep.representation(using: .JPEG, properties: [NSImageCompressionFactor: compression])
+			let imageRep = NSBitmapImageRep(data: image.tiffRepresentation!)!
+			data = imageRep.representation(using: .jpeg, properties: [NSBitmapImageRep.PropertyKey.compressionFactor: compression])
 		#endif
 
 		return data

@@ -66,7 +66,7 @@ public class Video: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
 				break
 			}
 		#else
-			captureDevice = AVCaptureDevice.defaultDevice(withMediaType:AVMediaTypeVideo)
+            captureDevice = AVCaptureDevice.default(for: .video)
 		#endif
 
 		return captureDevice

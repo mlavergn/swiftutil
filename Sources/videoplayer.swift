@@ -96,7 +96,7 @@ public class VideoPlayer {
 		#if os(iOS)
 		playerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
 		#else
-		playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+		playerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
 		#endif
 		playerLayer.zPosition = -1
 

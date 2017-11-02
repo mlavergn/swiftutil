@@ -258,7 +258,6 @@ public class HTTP: NSObject {
 					result = ""
 				}
 			}
-			cndlock.unlock(withCondition: 1)
 		}
 		downloadTask.resume()
 		cndlock.lock(whenCondition:1, before: NSDate.distantFuture)
