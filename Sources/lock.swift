@@ -11,6 +11,7 @@
 /// - author: Marc Lavergne <mlavergn@gmail.com>
 /// - copyright: 2017 Marc Lavergne. All rights reserved.
 /// - license: MIT
+
 import Foundation
 import Darwin
 
@@ -19,8 +20,8 @@ import Darwin
 /// - READY: Ready to block a task
 /// - FINISHED: Ready to unblock a task
 public enum FutureState: Int {
-	case READY    = 0
-	case FINISHED
+	case ready = 0
+	case finished
 }
 
 public class Future: NSObject {
@@ -28,15 +29,12 @@ public class Future: NSObject {
 	/// Shared condition for non-queue waits
 	let cnd = NSCondition()
 
-	/// Shared condition lock for queueing
-	let cndlock = NSConditionLock(condition: FutureState.READY.rawValue)
-
 	/// Obtain the shared lock
 	public func hold() {
 		cnd.lock()
 	}
 
-	/// Park the current thread unti signaled
+	/// Park the current thread until signaled
 	public func wait() {
 		cnd.wait()
 	}
@@ -51,21 +49,24 @@ public class Future: NSObject {
 		cnd.broadcast()
 	}
 
+    /// Shared condition lock for queueing
+    let cndlock = NSConditionLock(condition: FutureState.ready.rawValue)
+
 	/// queues the next work block
 	///
 	/// - Parameter block: block of work to perform as a closure
 	public func queue(block: @autoclosure() -> Void) {
-		cndlock.lock(whenCondition: FutureState.FINISHED.rawValue)
+		cndlock.lock(whenCondition: FutureState.finished.rawValue)
 		block()
-		cndlock.unlock(withCondition: FutureState.READY.rawValue)
+		cndlock.unlock(withCondition: FutureState.ready.rawValue)
 	}
 
 	/// dequeues the next work block
 	///
 	/// - Parameter block: block of work to perform as a closure
 	public func dequeue(block: @autoclosure() -> Void) {
-		cndlock.lock(whenCondition: FutureState.READY.rawValue)
+		cndlock.lock(whenCondition: FutureState.ready.rawValue)
 		block()
-		cndlock.unlock(withCondition: FutureState.FINISHED.rawValue)
+		cndlock.unlock(withCondition: FutureState.finished.rawValue)
 	}
 }

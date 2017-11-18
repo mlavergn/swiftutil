@@ -3,6 +3,7 @@
 /// - author: Marc Lavergne <mlavergn@gmail.com>
 /// - copyright: 2017 Marc Lavergne. All rights reserved.
 /// - license: MIT
+
 import Foundation
 
 // MARK: - HTTPMulti object
@@ -84,6 +85,7 @@ public class HTTPMulti: HTTP {
 				Log.error(error)
 				result = [:]
 			} else {
+                Log.debug(response?.expectedContentLength)
 				if let data = data {
 					result = JSON.decodeData(data)
 					Log.debug(result)

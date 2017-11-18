@@ -1,4 +1,4 @@
-/// Persistence via NSUserDefaults
+/// External task handling
 ///
 /// - author: Marc Lavergne <mlavergn@gmail.com>
 /// - copyright: 2017 Marc Lavergne. All rights reserved.
@@ -17,10 +17,10 @@ public class Task: NSObject {
         process.standardOutput = pipe
 
         process.launch()
-        
+
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let output = String(data: data)!
-        
+
         return output
     }
 }

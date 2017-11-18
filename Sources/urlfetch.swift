@@ -3,6 +3,7 @@
 /// - author: Marc Lavergne <mlavergn@gmail.com>
 /// - copyright: 2017 Marc Lavergne. All rights reserved.
 /// - license: MIT
+
 import Foundation
 
 public struct URLFetch {
@@ -51,10 +52,15 @@ public struct URLFetch {
 		let url = URL(string: urlString)!
 
 		let task = session.dataTask(with: url, completionHandler: {data, response, error in
-				if let d = data {
-					let dataString = String(data: d, encoding: .utf8)
-					completionHandler(dataString)
-				}
+            if let error = error {
+                Log.error(error)
+                return
+            }
+            if let d = data {
+                Log.debug(response?.expectedContentLength)
+                let dataString = String(data: d, encoding: .utf8)
+                completionHandler(dataString)
+            }
 		})
 
 		task.resume()

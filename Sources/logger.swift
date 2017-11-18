@@ -12,6 +12,7 @@
 /// - author: Marc Lavergne <mlavergn@gmail.com>
 /// - copyright: 2017 Marc Lavergne. All rights reserved.
 /// - license: MIT
+
 import Foundation
 
 #if os(Linux)
@@ -96,7 +97,7 @@ public struct Log {
 	///
 	/// - Parameter message: description as a String
  	@inline(__always) public static func output(_ message: String) {
-		switch(logDestination) {
+		switch logDestination {
 			case .STDERR:
 				fputs("\(message)\n", __stderrp)
 			default:

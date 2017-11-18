@@ -3,6 +3,7 @@
 /// - author: Marc Lavergne <mlavergn@gmail.com>
 /// - copyright: 2017 Marc Lavergne. All rights reserved.
 /// - license: MIT
+
 import CoreLocation
 
 // MARK: - GPS class
@@ -71,6 +72,10 @@ public class GPS: NSObject, CLLocationManagerDelegate {
 
 		CLGeocoder().reverseGeocodeLocation(location, completionHandler: { (placemarks, err) in
 			Log.stamp()
+            if let err = err {
+                Log.error(err)
+                return
+            }
 
 			guard placemarks != nil else {
 				return

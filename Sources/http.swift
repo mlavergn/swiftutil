@@ -3,6 +3,7 @@
 /// - author: Marc Lavergne <mlavergn@gmail.com>
 /// - copyright: 2017 Marc Lavergne. All rights reserved.
 /// - license: MIT
+
 import Foundation
 
 /// HTTP Methods
@@ -246,6 +247,7 @@ public class HTTP: NSObject {
 		let downloadTask = session.downloadTask(with: request) { (url: URL?, response: URLResponse?, err: Error?) in
 			cndlock.lock()
 			defer {cndlock.unlock(withCondition: 1)}
+            Log.debug(response?.expectedContentLength)
 			if let url = url {
 				// contents is in a file URL
 				Log.debug(url.absoluteString)
@@ -253,8 +255,8 @@ public class HTTP: NSObject {
 				result = payload.0
 				Log.debug(result!)
 			} else {
-				if err != nil {
-					Log.error(err!)
+				if let err = err {
+					Log.error(err)
 					result = ""
 				}
 			}
@@ -292,6 +294,7 @@ public class HTTP: NSObject {
 				Log.error(err)
 				result = [:]
 			} else {
+                Log.debug(response?.expectedContentLength)
 				result = JSON.decodeData(data!)
 				Log.debug(result)
 			}
@@ -323,6 +326,7 @@ public class HTTP: NSObject {
 				Log.error(err)
 				result = ["": 0 as AnyObject]
 			} else {
+                Log.debug(response?.expectedContentLength)
 				// contents is in a file URL
 				let payload = URLFetch.fetchDataContents(url!.absoluteString)
 				result = JSON.decodeData(payload.0)

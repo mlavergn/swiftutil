@@ -3,6 +3,7 @@
 /// - author: Marc Lavergne <mlavergn@gmail.com>
 /// - copyright: 2017 Marc Lavergne. All rights reserved.
 /// - license: MIT
+
 import Foundation
 
 // MARK: - App struct
@@ -14,7 +15,7 @@ public struct APNS {
         for byte in deviceToken {
             deviceTokenString += String(format: "%02X", byte)
         }
-        
+
         return deviceTokenString
 	}
 }

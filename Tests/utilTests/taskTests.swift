@@ -8,18 +8,17 @@ import XCTest
 @testable import Util
 
 class TaskTests: XCTestCase {
-    
+
     func testExecute() {
         let cmd = "/bin/echo"
         let args = "hello"
         let result = Task().execute(cmd, [args])
         XCTAssertEqual("hello\n", result)
     }
-    
+
     static var allTests: [(String, (TaskTests) -> () throws -> Void)] {
         return [
             ("testExecute", testExecute)
         ]
     }
 }
-
