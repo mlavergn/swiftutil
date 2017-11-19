@@ -103,7 +103,7 @@ public struct Images {
 				data = UIImageJPEGRepresentation(image, CGFloat(compression))
 			}
 		#elseif os(macOS)
-            if var image = NSImage(named: NSImage.Name(rawValue: name)) {
+            if var image = NSImage(named: name) {
 				image = resize(image: image) as NSImage!
 				let imageRep = NSBitmapImageRep(data: image.tiffRepresentation!)!
 
