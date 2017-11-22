@@ -5,7 +5,6 @@
 /// - license: MIT
 
 import XCTest
-@testable import Util
 
 class PersistableObjectTests: XCTestCase {
 

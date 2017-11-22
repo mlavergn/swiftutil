@@ -6,7 +6,7 @@
 import Foundation
 
 public class Task: NSObject {
-
+#if os(macOS)
     /// Execute an OS command and return the captured stdout
     func execute(_ command: String, _ args: [String]) -> String {
         let process = Process()
@@ -23,4 +23,5 @@ public class Task: NSObject {
 
         return output
     }
+#endif
 }

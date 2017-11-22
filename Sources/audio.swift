@@ -26,7 +26,7 @@ public struct Audio {
 			result = AVAudioSession.sharedInstance().outputVolume
 		#else
 			let deviceID = defaultAudioDevice()
-			var dataSize = UInt32(truncatingIfNeeded: MemoryLayout<Float>.size)
+            var dataSize = UInt32(MemoryLayout<Float>.size)
 
 			// get its sample rate
 			var audioAddr: AudioObjectPropertyAddress = AudioObjectPropertyAddress()
@@ -53,7 +53,7 @@ public struct Audio {
 			result = AVAudioSession.sharedInstance().sampleRate
 		#else
 			let deviceID = defaultAudioDevice()
-			var dataSize = UInt32(truncatingIfNeeded: MemoryLayout<Float64>.size)
+			var dataSize = UInt32(MemoryLayout<Float64>.size)
 
 			// get its sample rate
 			var audioAddr: AudioObjectPropertyAddress = AudioObjectPropertyAddress()
@@ -83,7 +83,7 @@ public struct Audio {
 		audioAddr.mElement = kAudioObjectPropertyElementMaster
 
 		let systemDeviceID = AudioObjectID(bitPattern: kAudioObjectSystemObject)
-		var dataSize = UInt32(truncatingIfNeeded: MemoryLayout<AudioDeviceID>.size)
+		var dataSize = UInt32(MemoryLayout<AudioDeviceID>.size)
 		var deviceID: AudioObjectID = 0
 		let err = AudioObjectGetPropertyData(systemDeviceID, &audioAddr, 0, nil, &dataSize, &deviceID)
 		if err != kAudioHardwareNoError {

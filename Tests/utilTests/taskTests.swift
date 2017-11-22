@@ -5,15 +5,16 @@
 /// - license: MIT
 
 import XCTest
-@testable import Util
 
 class TaskTests: XCTestCase {
 
     func testExecute() {
         let cmd = "/bin/echo"
         let args = "hello"
+        #if os(macOS)
         let result = Task().execute(cmd, [args])
         XCTAssertEqual("hello\n", result)
+        #endif
     }
 
     static var allTests: [(String, (TaskTests) -> () throws -> Void)] {

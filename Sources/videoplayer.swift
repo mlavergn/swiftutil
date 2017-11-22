@@ -94,11 +94,7 @@ public class VideoPlayer {
 		let playerLayer = AVPlayerLayer(player: player)
 //		playerLayer.autoresizingMask = [.layerWidthSizable, .layerHeightSizable]
 		playerLayer.frame = frame
-		#if os(iOS)
 		playerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
-		#else
-		playerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
-		#endif
 		playerLayer.zPosition = -1
 
 		#if os(iOS)
