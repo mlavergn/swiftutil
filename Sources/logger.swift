@@ -150,6 +150,15 @@ public struct Log {
 		}
 	}
 
+    /// Warning level log message
+    ///
+    /// - Parameter error: Error object
+    @inline(__always) public static func warn(_ error: Error, file: String = #file, function: String = #function, line: Int = #line) {
+        if logLevel.rawValue <= LogLevel.WARN.rawValue {
+            output("WARN:[\(file.fileName).\(function):\(line)] \(error)")
+        }
+    }
+
 	/// Error level log message
 	///
 	/// - Parameter message: description as a String
@@ -164,7 +173,7 @@ public struct Log {
 	/// - Parameter error: Error object
 	static public func error(_ error: Error, file: String = #file, function: String = #function, line: Int = #line) {
 		if logLevel.rawValue <= LogLevel.ERROR.rawValue {
-			output("ERROR:[\(file.fileName).\(function):\(line)] \(error.localizedDescription)")
+			output("ERROR:[\(file.fileName).\(function):\(line)] \(error)")
 		}
 	}
 
@@ -204,7 +213,7 @@ public struct Log {
 				pathURL = pathURL.appendingPathComponent("\(epoch).log")
 				try output.write(to:pathURL, atomically:false, encoding:String.Encoding.utf8)
 			} catch let error as NSError {
-				print(error.localizedDescription)
+				print(error)
 			}
 		}
 	}
