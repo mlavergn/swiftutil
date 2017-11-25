@@ -5,6 +5,7 @@
 /// - license: MIT
 
 import XCTest
+@testable import Util
 
 class TaskTests: XCTestCase {
 
