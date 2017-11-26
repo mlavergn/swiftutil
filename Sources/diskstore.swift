@@ -12,7 +12,7 @@ import Foundation
 private enum DiskStoreEntryKeys: String {
     case id
     case created
-    case value
+    case values
 }
 
 ///
@@ -21,25 +21,25 @@ private enum DiskStoreEntryKeys: String {
 public class DiskStoreEntry: NSObject, NSCoding {
     let id: String
     let created: Date
-    let value: String
+	var values: [AnyHashable: Any]
 
-    init(id: String? = nil, created: Date? = nil, value: String = "") {
+	init(id: String? = nil, created: Date? = nil, values: [String: Any] = [:]) {
         self.id = id ?? NSUUID().uuidString
         self.created = created ?? Date()
-        self.value = value
+        self.values = values
         super.init()
     }
-    
+
     public required init(coder decoder: NSCoder) {
         self.id = decoder.decodeObject(forKey: DiskStoreEntryKeys.id.rawValue) as? String ?? NSUUID().uuidString
         self.created = decoder.decodeObject(forKey: DiskStoreEntryKeys.created.rawValue) as? Date ?? Date()
-        self.value = decoder.decodeObject(forKey: DiskStoreEntryKeys.value.rawValue) as? String ?? ""
+		self.values = decoder.decodeObject(forKey: DiskStoreEntryKeys.values.rawValue) as? [AnyHashable: Any] ?? [:]
     }
- 
+
     public func encode(with coder: NSCoder) {
         coder.encode(id, forKey: DiskStoreEntryKeys.id.rawValue)
         coder.encode(created, forKey: DiskStoreEntryKeys.created.rawValue)
-        coder.encode(value, forKey: DiskStoreEntryKeys.value.rawValue)
+        coder.encode(values, forKey: DiskStoreEntryKeys.values.rawValue)
     }
 }
 
@@ -127,8 +127,6 @@ public class DiskStore: NSObject, NSCoding {
             self.dataset = [:]
             self.memoryTimestamp = Date.distantPast
         }
-        super.init()
-        NotificationCenter.default.addObserver(self, selector: #selector(DiskStore.handleNotification), name: diskStoreNotification, object: nil)
     }
 
     public func encode(with coder: NSCoder) {
@@ -152,7 +150,7 @@ public class DiskStore: NSObject, NSCoding {
             self.memoryTimestamp = latest.memoryTimestamp
         }
     }
- 
+
     /// Commits the in-memory contents to the disk and notifies any copies
     ///
     /// - Returns: true if successfully persisted, otherwise false
@@ -220,7 +218,7 @@ public class DiskStore: NSObject, NSCoding {
     private static func write(_ store: DiskStore) -> Bool {
         var pathURL = DiskStore.storeDirectoryBaseURL
         pathURL.appendPathExtension(".tmp")
-        let result = NSKeyedArchiver.archiveRootObject(self, toFile: pathURL.path)
+        let result = NSKeyedArchiver.archiveRootObject(store, toFile: pathURL.path)
         if result {
             do {
                 try _ = FileManager.default.replaceItemAt(DiskStore.storeDirectoryBaseURL, withItemAt: pathURL, options:[.usingNewMetadataOnly])
