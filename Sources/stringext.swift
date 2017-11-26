@@ -106,7 +106,7 @@ public extension String {
 			start = self.index(self.endIndex, offsetBy:from)
 		}
 
-		return String(self[start...self.endIndex])
+		return String(self[start..<self.endIndex])
 		// swift 3
 		// let range: Range<Index>?
 		// range = start..<self.endIndex

@@ -7,11 +7,14 @@ class HTTPMultiTests: XCTestCase {
 		var blob: Data?
 
 		if !App.isSandboxed {
-			guard var url = URL(string:"file://" + FileManager.default.currentDirectoryPath) else {
+			let testDir = #file
+			let testSuffix = "utilTests/httpMultiTests.swift"
+			let baseDir = testDir.substring(to: testDir.count - testSuffix.count )
+			guard var url = URL(string:"file://" + baseDir) else {
 				XCTAssertFalse(true, "unable to obtain current working directory")
 				return
 			}
-			url.appendPathComponent("Tests/mayhem.jpg")
+			url.appendPathComponent("mayhem.jpg")
 			do {
 				try blob = Data.init(contentsOf: url)
 			} catch {
