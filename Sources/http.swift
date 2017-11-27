@@ -277,13 +277,13 @@ public class HTTP: NSObject {
 	/// - Parameters:
 	///   - urlString: url as a String
 	///   - json: payload of type String
-	public func postJSON(urlString: String, json: [String: Any]) -> [String: Any]? {
+	public func postJSON(urlString: String, json: [AnyHashable: Any]) -> [AnyHashable: Any]? {
 		Log.stamp()
 		self.urlString = urlString
 		self.contentType = .json
 		self.method = .post
 
-		var result: [String: AnyObject]? = nil
+		var result: [AnyHashable: Any]? = nil
 		let cndlock = NSConditionLock(condition: 0)
 
 		let postData = JSON.encodeAsData(json)
@@ -310,13 +310,13 @@ public class HTTP: NSObject {
 	///
 	/// - Parameter urlString: url as a String
 	/// - Returns: deserialized JSON payload as a dictionary
-	public func getJSON(urlString: String) -> [String: Any]? {
+	public func getJSON(urlString: String) -> [AnyHashable: Any]? {
 		Log.stamp()
 		self.urlString = urlString
 		self.contentType = .json
 		self.method = .get
 
-		var result: [String: AnyObject]? = nil
+		var result: [AnyHashable: Any]? = nil
 		let cndlock = NSConditionLock(condition: 0)
 
 		let downloadTask = session.downloadTask(with: request) { (url: URL?, response: URLResponse?, err: Error?) in

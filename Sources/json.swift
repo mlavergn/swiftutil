@@ -14,7 +14,7 @@ public struct JSON {
 	/// - Returns: Any optional
 	public static func decode(_ payload: Data) -> Any? {
 		do {
-			return try JSONSerialization.jsonObject(with:payload, options: .mutableContainers)
+			return try JSONSerialization.jsonObject(with:payload, options: [.mutableContainers, .allowFragments])
 		} catch {
 			return nil
 		}
@@ -36,8 +36,8 @@ public struct JSON {
 	///
 	/// - Parameter payload: payload of type Data
 	/// - Returns: Any optional
-	public static func decodeData(_ payload: Data) -> [String: AnyObject]? {
-		return self.decode(payload) as? [String: AnyObject]
+	public static func decodeData(_ payload: Data) -> [AnyHashable: Any]? {
+		return self.decode(payload) as? [AnyHashable: Any]
 	}
 
 	/// Encodes a dictionary into a Data payload
@@ -51,8 +51,8 @@ public struct JSON {
 	/// Decodes a String payload into a Swift object type
 	///
 	/// - Parameter payload: payload of type String
-	/// - Returns: Dictionary with String keys and AnyObject values
-	public static func decodeString(_ payload: String) -> [String: AnyObject]? {
+	/// - Returns: Dictionary with hashable keys and values
+	public static func decodeString(_ payload: String) -> [AnyHashable: Any]? {
 		return self.decodeData(payload.data!)
 	}
 
@@ -61,6 +61,6 @@ public struct JSON {
 	/// - Parameter object: Any object
 	/// - Returns: String optional
 	public static func encodeAsString(_ object: Any) -> String? {
-		return String(data:self.encode(object)!)
+		return String(data: self.encode(object)!)
 	}
 }

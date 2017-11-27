@@ -56,7 +56,7 @@ public class HTTPMulti: HTTP {
 		}
 	}
 
-	public func postMultiPart(urlString: String) -> [String: Any] {
+	public func postMultiPart(urlString: String) -> [AnyHashable: Any] {
 		Log.stamp()
 		self.urlString = urlString
 
@@ -75,7 +75,7 @@ public class HTTPMulti: HTTP {
 		let cLen = String(self.contentLength)
 		self.request.setValue(cLen, forHTTPHeaderField: HTTPHeaderKey.contentLength.rawValue)
 
-		var result: [String: AnyObject]? = nil
+		var result: [AnyHashable: Any]? = nil
 		let cndlock = NSConditionLock(condition: 0)
 
 		let uploadTask = session.uploadTask(with: request, from: self.postData!) { (data: Data?, response: URLResponse?, err: Error?) in
