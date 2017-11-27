@@ -4,7 +4,7 @@
 #
 ###############################################
 
-SWIFTC_OPTS := 
+SWIFTC_OPTS := -c release -Xswiftc -target -Xswiftc x86_64-apple-macosx10.13 -Xswiftc -static-stdlib
 LINKER_OPTS := -Xlinker -lUtil
 
 all: build
@@ -37,8 +37,7 @@ SYS_PATH  := /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platf
 INCL_PATH := $(SYS_PATH)/Developer/SDKs/iPhoneOS.sdk/usr/include
 LIB_PATH  := $(SYS_PATH)/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks
 SDK_PATH  := $(SYS_PATH)/Developer/SDKs/iPhoneOS.sdk
-#TARGET    := armv7-apple-ios10.0
-TARGET    := arm64-apple-ios10.0
+TARGET    := arm64-apple-ios11.0
 MODULE    := Util
 
 ios:

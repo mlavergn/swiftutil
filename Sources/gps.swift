@@ -70,64 +70,40 @@ public class GPS: NSObject, CLLocationManagerDelegate {
 		let location = CLLocation.init(latitude: coordinates.latitude, longitude: coordinates.longitude)
 		var result = ""
 
-		CLGeocoder().reverseGeocodeLocation(location, completionHandler: { (placemarks, err) in
+		CLGeocoder().reverseGeocodeLocation(location, completionHandler: { (placemarks, error) in
 			Log.stamp()
-            if let err = err {
-                Log.error(err)
+            if let error = error {
+                Log.error(error)
                 return
             }
 
-			guard placemarks != nil else {
+			guard let placemark = placemarks?.first else {
 				return
 			}
-
-			if let addrDict = self.safeAddressDictionary(placemarks: placemarks) {
-				if let zip = self.safeAddressDictionaryLookup(addressDictionary: addrDict, key: "ZIP") {
-					result = zip
-					if let countryCode = self.safeAddressDictionaryLookup(addressDictionary: addrDict, key: "CountryCode") {
-						if countryCode == "CA" {
-							// we get the forward sortation are only, so tack the primary local delivery unit 
-							result.append("0A0")
+            
+			if #available(iOS 11, macOS 10.13, *) {
+                if let zip = placemark.postalCode {
+                    result = zip
+                }
+			} else {
+				if let addrDict = placemark.addressDictionary {
+					if let zip = addrDict["ZIP"] as? String {
+						result = zip
+						if let countryCode = addrDict["CountryCode"] as? String {
+							if countryCode == "CA" {
+								// we get the forward sortation are only, so tack the primary local delivery unit 
+								result.append("0A0")
+							}
 						}
+						self.deactivateLocationManager()
 					}
-					self.deactivateLocationManager()
 				}
 			}
+
 
 			Log.debug(result)
 		})
 
 		return result
-	}
-
-	/// Wrapped for AddressDictionary extraction
-	///
-	/// - Parameter placemarks: CLPlacemarks array
-	/// - Returns: AddressDictionary from CLPlacemark at index 0
-	private func safeAddressDictionary(placemarks: [CLPlacemark]?) -> [AnyHashable : Any]? {
-		guard placemarks != nil else {
-			return nil
-		}
-
-		let placemark = placemarks![0]
-		if let addressDictionary = placemark.addressDictionary {
-			return addressDictionary
-		}
-
-		return nil
-	}
-
-	/// Wrapped for AddressDictionary lookups
-	///
-	/// - Parameters:
-	///   - addressDictionary: address dictionary from CLPlacemark
-	///   - key: key within dictionary
-	/// - Returns: String optional with value
-	private func safeAddressDictionaryLookup(addressDictionary: [AnyHashable : Any], key: String) -> String? {
-		if let result = addressDictionary[key] {
-			return result as? String
-		}
-
-		return nil
 	}
 }
