@@ -78,16 +78,16 @@ public struct Log {
 		// (todo) this should be read via a timer
 		if let value = ProcessInfo.processInfo.environment["LOG_LEVEL"] {
 			if let valInt = Int(value) {
-				if valInt >= LogLevel.ALL.rawValue && valInt <= LogLevel.OFF.rawValue {
-					logLevel = LogLevel(rawValue: valInt)!
+				if let valLogLevel = LogLevel(rawValue: valInt) {
+					logLevel = valLogLevel
 				}
 			}
 		}
 
 		if let value = ProcessInfo.processInfo.environment["LOG_DEST"] {
 			if let valInt = Int(value) {
-				if valInt >= LogDestination.STDOUT.rawValue && valInt <= LogDestination.SYSTEM.rawValue {
-					logDestination = LogDestination(rawValue: valInt)!
+				if let valLogDestination = LogDestination(rawValue: valInt) {
+					logDestination = valLogDestination
 				}
 			}
 		}
@@ -98,11 +98,11 @@ public struct Log {
 	/// - Parameter message: description as a String
  	@inline(__always) public static func output(_ message: String) {
 		switch logDestination {
-			case .STDERR:
-				fputs("\(message)\n", __stderrp)
-			default:
-				print(message)
-			// - todo: implemement the other destination
+		case .STDERR:
+			fputs("\(message)\n", __stderrp)
+		default:
+			print(message)
+		// - todo: implemement the other destination
 		}
 	}
 
@@ -111,10 +111,10 @@ public struct Log {
 	/// - Parameter message: description as a String optional
  	@inline(__always) public static func debug(_ message: String?, file: String = #file, function: String = #function, line: Int = #line) {
 		if logLevel.rawValue <= LogLevel.DEBUG.rawValue {
-			if message == nil {
-				output("DEBUG:[\(file.fileName).\(function):\(line)] empty optional")
+			if let message = message {
+				output("DEBUG:[\(file.fileName).\(function):\(line)] \(message)")
 			} else {
-				output("DEBUG:[\(file.fileName).\(function):\(line)] \(message!)")
+				output("DEBUG:[\(file.fileName).\(function):\(line)] empty optional")
 			}
 		}
 	}
@@ -124,10 +124,10 @@ public struct Log {
 	/// - Parameter object: Any optional to print as a debug string
 	@inline(__always) public static func debug(_ object: Any?, file: String = #file, function: String = #function, line: Int = #line) {
 		if logLevel.rawValue <= LogLevel.DEBUG.rawValue {
-			if object == nil {
-				output("DEBUG:[\(file.fileName).\(function):\(line)] empty optional")
-			} else {
+			if let object = object as AnyObject? {
 				output("DEBUG:[\(file.fileName).\(function):\(line)] \(object.debugDescription)")
+			} else {
+				output("DEBUG:[\(file.fileName).\(function):\(line)] empty optional")
 			}
 		}
 	}
@@ -202,7 +202,7 @@ public struct Log {
 	public static func dumpFile(output: String) {
 		if #available(iOS 10.0, macOS 10.12, tvOS 10.0, watchOS 3.0, *) {
 			#if os(iOS)
-	 			var pathURL = URL(string:NSHomeDirectory())!
+	 			var pathURL = URL(fileURLWithPath: NSHomeDirectory())
 	 		#else
 	 			var pathURL = FileManager.default.homeDirectoryForCurrentUser
 	 		#endif
@@ -211,7 +211,7 @@ public struct Log {
 				try FileManager.default.createDirectory(atPath: pathURL.path, withIntermediateDirectories: true, attributes: nil)
 				let epoch = NSDate().timeIntervalSince1970
 				pathURL = pathURL.appendingPathComponent("\(epoch).log")
-				try output.write(to:pathURL, atomically:false, encoding:String.Encoding.utf8)
+				try output.write(to: pathURL, atomically: false, encoding: String.Encoding.utf8)
 			} catch let error as NSError {
 				print(error)
 			}
@@ -225,8 +225,8 @@ public struct Log {
 
 	/// Measures the elapsed time since the last mark in milliseconds
 	public static var timerMeasure: Void {
-		if timeMark != nil {
-			let timeInterval = Double(DispatchTime.now().uptimeNanoseconds - timeMark!.uptimeNanoseconds) / 1_000_000
+		if let timeMark = timeMark {
+			let timeInterval = Double(DispatchTime.now().uptimeNanoseconds - timeMark.uptimeNanoseconds) / 1_000_000
 			output("ELAPSED [\(timeInterval)]ms")
 		}
 	}

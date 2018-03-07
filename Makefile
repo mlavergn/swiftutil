@@ -13,8 +13,8 @@ build:
 	swift package update
 	swift build $(SWIFTC_OPTS) $(LINKER_OPTS) --build-path=macosBuild
 
-test:
-	swift test $(SWIFTC_OPTS) $(LINKER_OPTS) 
+test: clean
+	swift test $(SWIFTC_OPTS) $(LINKER_OPTS) -Xswiftc -enable-testing
 
 clean:
 	swift package clean
