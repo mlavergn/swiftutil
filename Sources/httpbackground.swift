@@ -35,13 +35,13 @@ public class HTTPBackground: NSObject, URLSessionDelegate, URLSessionDataDelegat
         config.httpMaximumConnectionsPerHost = 4
         config.networkServiceType = .background
         config.isDiscretionary = false
-        
+
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = body
-        
+
         let session = URLSession(configuration: config, delegate: self, delegateQueue: OperationQueue())
-        
+
         let backgroundTask = session.dataTask(with: request)
         backgroundTask.earliestBeginDate = delay
         backgroundTask.countOfBytesClientExpectsToSend = Int64(body.count)
@@ -50,7 +50,7 @@ public class HTTPBackground: NSObject, URLSessionDelegate, URLSessionDataDelegat
         backgroundTask.resume()
         return backgroundTask
 	}
-    
+
     public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         print(#function)
     }

@@ -5,7 +5,7 @@
 /// - license: MIT
 
 import Foundation
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import UIKit
 #endif
 
@@ -36,11 +36,12 @@ public struct App {
 	///   - value: value as an Any
 	///   - key: plist key as a String
 	public static func setPlistKey(value: String, key: Any) {
-		let path = Bundle.main.path(forResource: "Info", ofType: "plist")
-		Log.debug(path)
-		if let plist = NSMutableDictionary.init(contentsOfFile: path!) {
-			plist[key] = value
-			plist.write(toFile: path!, atomically: true)
+		if let path = Bundle.main.path(forResource: "Info", ofType: "plist") {
+			Log.debug(path)
+			if let plist = NSMutableDictionary.init(contentsOfFile: path) {
+				plist[key] = value
+				plist.write(toFile: path, atomically: true)
+			}
 		}
 	}
 
@@ -48,7 +49,7 @@ public struct App {
 	/// http://stackoverflow.com/questions/43097604/alternate-icon-in-ios-10-3
 	/// You MUST ask the user prior to changing the icon
 	private static func updateIcon(name: String?) {
-		#if os(iOS)
+		#if os(iOS) || os(tvOS)
 		if #available(iOS 10.3, *) {
 			if UIApplication.shared.supportsAlternateIcons {
 				UIApplication.shared.setAlternateIconName(name) { (err: Error?) in

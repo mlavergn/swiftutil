@@ -6,7 +6,7 @@
 
 import Foundation
 
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import UIKit
 import ImageIO
 public typealias Image = UIImage

@@ -42,7 +42,7 @@ public struct FileSystem {
 
 	/// Home directory as a URL
 	public static var homeDirectory: URL {
-		#if os(iOS)
+		#if os(iOS) || os(tvOS)
 			if let url = URL(string:NSHomeDirectory()) {
 				return url
 			} else {

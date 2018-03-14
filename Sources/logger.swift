@@ -201,7 +201,7 @@ public struct Log {
 	/// - Parameter message: output as a String
 	public static func dumpFile(output: String) {
 		if #available(iOS 10.0, macOS 10.12, tvOS 10.0, watchOS 3.0, *) {
-			#if os(iOS)
+			#if os(iOS) || os(tvOS)
 	 			var pathURL = URL(fileURLWithPath: NSHomeDirectory())
 	 		#else
 	 			var pathURL = FileManager.default.homeDirectoryForCurrentUser

@@ -15,11 +15,7 @@ public extension Date {
 	/// - Parameter date: Date to compare caller against
 	/// - Returns: Bool with true if date is later than caller, otherwise false
 	public func isBefore(date: Date) -> Bool {
-		if self.compare(date) == .orderedAscending {
-			return true
-		} else {
-			return false
-		}
+		return self.compare(date) == .orderedAscending ? true : false
 	}
 
 	/// Compare caller to date to caller and determine if caller is later
@@ -27,11 +23,7 @@ public extension Date {
 	/// - Parameter date: Date to compare caller against
 	/// - Returns: Bool with true if date is earlier than caller, otherwise false
 	public func isAfter(date: Date) -> Bool {
-		if self.compare(date) == .orderedDescending {
-			return true
-		} else {
-			return false
-		}
+		return self.compare(date) == .orderedDescending ? true : false
 	}
 
 	/// Compare caller to date to caller and determine if caller is equal
@@ -39,11 +31,7 @@ public extension Date {
 	/// - Parameter date: Date to compare caller against
 	/// - Returns: Bool with true if date is equal to caller, otherwise false
 	public func isEqual(date: Date) -> Bool {
-		if self.compare(date) == .orderedSame {
-			return true
-		} else {
-			return false
-		}
+		return self.compare(date) == .orderedSame ? true : false
 	}
 }
 
@@ -75,7 +63,7 @@ public struct DateTime {
 	///
 	/// - Parameters:
 	///   - format: format mask String
-	///   - date: <#date description#>
+	///   - date: date as String
 	/// - Returns: Date optional
 	public static func stringToDate(format: String, date: String) -> Date? {
 		let dateFormat = DateFormatter()

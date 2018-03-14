@@ -16,7 +16,7 @@ import CoreWLAN
 public struct Wifi {
 	public static func ssids() -> [String] {
 		var ssids: [String] = []
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 		guard let ifs = CNCopySupportedInterfaces() as? [String] else {
 			Log.error("Could not access network interfaces")
 			return ssids

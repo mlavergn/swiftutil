@@ -22,7 +22,7 @@ public struct Audio {
 
 	public static func volume() -> Float {
 		var result: Float = 0.0
-		#if os(iOS)
+		#if os(iOS) || os(tvOS)
 			result = AVAudioSession.sharedInstance().outputVolume
 		#else
 			let deviceID = defaultAudioDevice()
@@ -49,7 +49,7 @@ public struct Audio {
 
 	public static func sampleRate() -> Double {
 		var result: Double = 0.0
-		#if os(iOS)
+		#if os(iOS) || os(tvOS)
 			result = AVAudioSession.sharedInstance().sampleRate
 		#else
 			let deviceID = defaultAudioDevice()

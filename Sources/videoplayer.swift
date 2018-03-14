@@ -6,7 +6,7 @@
 
 import AVFoundation
 
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import UIKit
 public typealias View = UIView
 #else
@@ -97,11 +97,13 @@ public class VideoPlayer {
 		playerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
 		playerLayer.zPosition = -1
 
-		#if os(iOS)
+		#if os(iOS) || os(tvOS)
 		view.layer.addSublayer(playerLayer)
 		#else
 		view.wantsLayer = true
-		view.layer!.addSublayer(playerLayer)
+		if let layer = view.layer {
+			layer.addSublayer(playerLayer)
+		}
 		#endif
 
 		playerLayer.setNeedsLayout()
@@ -133,7 +135,7 @@ public class VideoPlayer {
 			Log.warn("Unable to capture screen")
 			return nil
 		}
-		#if os(iOS)
+		#if os(iOS) || os(tvOS)
 		return Image(cgImage: capture!)
 		#else
 		return Image(cgImage: capture!, size: frame.size)

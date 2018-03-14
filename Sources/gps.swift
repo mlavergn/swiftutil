@@ -29,7 +29,9 @@ public class GPS: NSObject, CLLocationManagerDelegate {
 			if CLLocationManager.locationServicesEnabled() {
 				locationManager.delegate = self
 				locationManager.desiredAccuracy = kCLLocationAccuracyKilometer
+				#if !os(tvOS)
 				locationManager.startUpdatingLocation()
+				#endif
 			}
 		}
 	}

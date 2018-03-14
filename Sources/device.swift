@@ -6,7 +6,7 @@
 
 import Foundation
 
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import UIKit
 #else
 import IOKit
@@ -27,7 +27,7 @@ public struct Device {
 	public static var deviceId: String {
 		Log.stamp()
 		var id: String = ""
-		#if os(iOS)
+		#if os(iOS) || os(tvOS)
 		if let serial = UIDevice.current.identifierForVendor?.uuidString {
 			id = serial
 		}
@@ -44,7 +44,7 @@ public struct Device {
 
 	/// Device name as a String
 	public static var name: String {
-		#if os(iOS)
+		#if os(iOS) || os(tvOS)
 		return UIDevice.current.name
 		#else
 		guard let name = Host.current().localizedName else {

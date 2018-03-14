@@ -6,7 +6,9 @@
 
 import Foundation
 
-#if os(iOS)
+#if !os(tvOS)
+
+#if os(iOS) || os(tvOS)
 import UIKit
 #endif
 
@@ -84,3 +86,5 @@ public class Video: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
 		captureSession.startRunning()
 	}
 }
+
+#endif
