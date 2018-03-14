@@ -80,7 +80,7 @@ public class GPS: NSObject, CLLocationManagerDelegate {
 			guard let placemark = placemarks?.first else {
 				return
 			}
-            
+
 			if #available(iOS 11, macOS 10.13, *) {
                 if let zip = placemark.postalCode {
                     result = zip
@@ -99,7 +99,6 @@ public class GPS: NSObject, CLLocationManagerDelegate {
 					}
 				}
 			}
-
 
 			Log.debug(result)
 		})

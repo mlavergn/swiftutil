@@ -46,6 +46,7 @@ public struct App {
 
 	/// Change the app icon to the named plist icon, use nil for default icon
 	/// http://stackoverflow.com/questions/43097604/alternate-icon-in-ios-10-3
+	/// You MUST ask the user prior to changing the icon
 	private static func updateIcon(name: String?) {
 		#if os(iOS)
 		if #available(iOS 10.3, *) {

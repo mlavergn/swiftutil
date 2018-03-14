@@ -4,4 +4,6 @@
 *.playground
 xcuserdata
 Package.pins
+Package.resolved
 iosBuild*
+macosBuild*
