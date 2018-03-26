@@ -14,6 +14,7 @@
 /// - license: MIT
 
 import Foundation
+import os.log
 
 #if os(Linux)
 import Glibc
@@ -51,6 +52,7 @@ public enum LogDestination: Int {
 	case STDERR
 	case FILE
 	case SYSTEM
+	case OSLOG
 }
 
 public struct Log {
@@ -60,6 +62,9 @@ public struct Log {
 	/// Log destination
 	public static var logDestination: LogDestination = LogDestination.STDOUT
 
+	/// os_log logger
+	public static var logger = OSLog.default
+
 	/// Timer singleton for performance measurement
 	public static var timeMark: DispatchTime?
 
@@ -68,9 +73,21 @@ public struct Log {
 	/// - Parameters:
 	///   - level: Filter level for output
 	///   - destination: Log destination
-	public static func configure(level: LogLevel, destination: LogDestination = .STDOUT) {
+	public static func configure(level: LogLevel, destination: LogDestination = .STDOUT, _ subssystem: String? = nil, _ category: String? = nil) {
 		logLevel = level
 		logDestination = destination
+		
+		// experimental support for os_log
+		if #available(macOS 10.12, *) {
+			if destination == .OSLOG {
+				if subssystem != nil && category != nil {
+					logger = OSLog(subsystem: subssystem!, category: category!)
+				}
+			}
+		} else {
+			// send out back to STDOUT
+			logDestination = .STDOUT
+		}
 	}
 
 	/// Read logger environment variables and adjust settings
@@ -96,13 +113,21 @@ public struct Log {
 	/// Outputs a log message to the set destination
 	///
 	/// - Parameter message: description as a String
- 	@inline(__always) public static func output(_ message: String) {
+	@inline(__always) public static func output(_ message: String, _ level: OSLogType = .debug, _ object: Any? = nil) {
 		switch logDestination {
 		case .STDERR:
 			fputs("\(message)\n", __stderrp)
+		case .OSLOG:
+			if #available(macOS 10.12, *) {
+				if let rawMessage = object as? String {
+					os_log("[%{public}@.%{public}@:%{public}d] %{public}@", log: logger, type: level, #file, #function, #line, rawMessage)
+				} else {
+					os_log("[%{public}@.%{public}@:%{public}d] %{public}@", log: logger, type: level, #file, #function, #line, object.debugDescription)
+				}
+			}
 		default:
 			print(message)
-		// - todo: implemement the other destination
+		// - todo: implemement the other destinations
 		}
 	}
 
@@ -112,9 +137,9 @@ public struct Log {
  	@inline(__always) public static func debug(_ message: String?, file: String = #file, function: String = #function, line: Int = #line) {
 		if logLevel.rawValue <= LogLevel.DEBUG.rawValue {
 			if let message = message {
-				output("DEBUG:[\(file.fileName).\(function):\(line)] \(message)")
+				output("DEBUG:[\(file.fileName).\(function):\(line)] \(message)", .debug, message)
 			} else {
-				output("DEBUG:[\(file.fileName).\(function):\(line)] empty optional")
+				output("DEBUG:[\(file.fileName).\(function):\(line)] empty optional", .debug)
 			}
 		}
 	}
@@ -125,9 +150,9 @@ public struct Log {
 	@inline(__always) public static func debug(_ object: Any?, file: String = #file, function: String = #function, line: Int = #line) {
 		if logLevel.rawValue <= LogLevel.DEBUG.rawValue {
 			if let object = object as AnyObject? {
-				output("DEBUG:[\(file.fileName).\(function):\(line)] \(object.debugDescription)")
+				output("DEBUG:[\(file.fileName).\(function):\(line)] \(object.debugDescription)", .debug, object)
 			} else {
-				output("DEBUG:[\(file.fileName).\(function):\(line)] empty optional")
+				output("DEBUG:[\(file.fileName).\(function):\(line)] empty optional", .debug)
 			}
 		}
 	}
@@ -137,7 +162,7 @@ public struct Log {
 	/// - Parameter message: description as a String
 	@inline(__always) public static func info(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
 		if logLevel.rawValue <= LogLevel.INFO.rawValue {
-			output("INFO:[\(file.fileName).\(function):\(line)] \(message)")
+			output("INFO:[\(file.fileName).\(function):\(line)] \(message)", .info, message)
 		}
 	}
 
@@ -146,7 +171,7 @@ public struct Log {
 	/// - Parameter message: description as a String
 	@inline(__always) public static func warn(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
 		if logLevel.rawValue <= LogLevel.WARN.rawValue {
-			output("WARN:[\(file.fileName).\(function):\(line)] \(message)")
+			output("WARN:[\(file.fileName).\(function):\(line)] \(message)", .default, message)
 		}
 	}
 
@@ -155,7 +180,7 @@ public struct Log {
     /// - Parameter error: Error object
     @inline(__always) public static func warn(_ error: Error, file: String = #file, function: String = #function, line: Int = #line) {
         if logLevel.rawValue <= LogLevel.WARN.rawValue {
-            output("WARN:[\(file.fileName).\(function):\(line)] \(error)")
+            output("WARN:[\(file.fileName).\(function):\(line)] \(error)", .default, error)
         }
     }
 
@@ -164,7 +189,7 @@ public struct Log {
 	/// - Parameter message: description as a String
 	static public func error(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
 		if logLevel.rawValue <= LogLevel.ERROR.rawValue {
-			output("ERROR:[\(file.fileName).\(function):\(line)] \(message)")
+			output("ERROR:[\(file.fileName).\(function):\(line)] \(message)", .error, message)
 		}
 	}
 
@@ -173,7 +198,7 @@ public struct Log {
 	/// - Parameter error: Error object
 	static public func error(_ error: Error, file: String = #file, function: String = #function, line: Int = #line) {
 		if logLevel.rawValue <= LogLevel.ERROR.rawValue {
-			output("ERROR:[\(file.fileName).\(function):\(line)] \(error)")
+			output("ERROR:[\(file.fileName).\(function):\(line)] \(error)", .error, error)
 		}
 	}
 
@@ -181,7 +206,7 @@ public struct Log {
 	///
 	/// - Parameter message: description as a String
 	static public func fatal(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
-		output("FATAL:[\(file.fileName).\(function):\(line)] \(message)")
+		output("FATAL:[\(file.fileName).\(function):\(line)] \(message)", .fault, message)
 	}
 
 	/// Outputs the file, function, and line stamp to stdout
