@@ -42,11 +42,11 @@ public struct Images {
 		let size = CGSize(width: CGFloat(width), height: CGFloat(height))
 
 		if !image.size.equalTo(size) {
-			sizedImage = NSImage(size:size)
+			sizedImage = NSImage(size: size)
 			sizedImage.lockFocus()
 
-			let rect = CGRect(origin:CGPoint.zero, size:size)
-			image.draw(in:rect, from:NSRect.zero, operation:NSCompositingOperation.sourceOver, fraction:1.0)
+			let rect = CGRect(origin: CGPoint.zero, size: size)
+			image.draw(in: rect, from: NSRect.zero, operation: NSCompositingOperation.sourceOver, fraction: 1.0)
 
 			sizedImage.unlockFocus()
 		}
@@ -79,7 +79,7 @@ public struct Images {
 
 		if !image.size.equalTo(size) {
 			UIGraphicsBeginImageContext(size)
-			image.draw(in: CGRect(x:0, y:0, width:size.width, height:size.height))
+			image.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
 			sizedImage = UIGraphicsGetImageFromCurrentImageContext()!
 			UIGraphicsEndImageContext()
 		}

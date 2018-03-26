@@ -108,7 +108,7 @@ public class VideoPlayer {
 
 		playerLayer.setNeedsLayout()
 
-		player?.seek(to:kCMTimeZero)
+		player?.seek(to: kCMTimeZero)
 		player?.play()
 	}
 
@@ -118,7 +118,7 @@ public class VideoPlayer {
 
 	public func stop() {
 		pause()
-		player?.seek(to:kCMTimeZero)
+		player?.seek(to: kCMTimeZero)
 	}
 
 	public func seek(seconds: Float64) {
@@ -130,7 +130,7 @@ public class VideoPlayer {
 		let gen = AVAssetImageGenerator(asset: asset!)
 		var capture: CGImage? = nil
 		do {
-			capture = try gen.copyCGImage(at: player!.currentTime(), actualTime:nil)
+			capture = try gen.copyCGImage(at: player!.currentTime(), actualTime: nil)
 		} catch {
 			Log.warn("Unable to capture screen")
 			return nil

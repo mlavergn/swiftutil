@@ -13,9 +13,9 @@ public struct URLFetch {
 	/// - Parameter urlString: url as a String
 	/// - Returns: Tuple containing String with contents and optional Error
 	public static func fetchStringContents(_ urlString: String) -> (String, Error?) {
-		if let url = URL(string:urlString) {
+		if let url = URL(string: urlString) {
 			do {
-				let contents: String = try String(contentsOf:url)
+				let contents: String = try String(contentsOf: url)
 				return (contents, nil)
 			} catch {
 				return ("", error)
@@ -29,9 +29,9 @@ public struct URLFetch {
 	/// - Parameter urlString: url as a String
 	/// - Returns: Tuple containing Data with contents and optional Error
 	public static func fetchDataContents(_ urlString: String) -> (Data, Error?) {
-		if let url = URL(string:urlString) {
+		if let url = URL(string: urlString) {
 			do {
-				let contents = try Data(contentsOf:url)
+				let contents = try Data(contentsOf: url)
 				return (contents, nil)
 			} catch {
 				return (Data(), error)

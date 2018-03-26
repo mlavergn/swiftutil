@@ -23,7 +23,7 @@ public struct Wifi {
 		}
 
 		for interface in ifs {
-			if let ssidMap = CNCopyCurrentNetworkInfo(interface as CFString) as? [String : AnyObject] {
+			if let ssidMap = CNCopyCurrentNetworkInfo(interface as CFString) as? [String: AnyObject] {
 				for d in ssidMap.keys {
 					print("\(d): \(ssidMap[d]!)\n")
 					ssids.append(d)

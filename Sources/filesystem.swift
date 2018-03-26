@@ -11,7 +11,7 @@ public struct FileSystem {
 
 	/// Current working directory as a URL
 	public static var currentDirectory: URL {
-		if let url = URL(string:"file://" + FileManager.default.currentDirectoryPath) {
+		if let url = URL(string: "file://" + FileManager.default.currentDirectoryPath) {
 			return url
 		} else {
 			/// -todo: change to return an error
@@ -33,7 +33,7 @@ public struct FileSystem {
 	public static var documentDirectory: URL {
 		let documentsPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
 		if documentsPaths.count > 0 {
-			return URL(string:"file://" + documentsPaths[0])!
+			return URL(string: "file://" + documentsPaths[0])!
 		} else {
 			/// -todo: change to return an error
 			return rootDirectory
@@ -43,7 +43,7 @@ public struct FileSystem {
 	/// Home directory as a URL
 	public static var homeDirectory: URL {
 		#if os(iOS) || os(tvOS)
-			if let url = URL(string:NSHomeDirectory()) {
+			if let url = URL(string: NSHomeDirectory()) {
 				return url
 			} else {
 				/// -todo: change to return an error
@@ -64,7 +64,7 @@ public struct FileSystem {
 
 	/// Root directory as a URL
 	public static var rootDirectory: URL {
-		return URL(string:"file:///")!
+		return URL(string: "file:///")!
 	}
 
 	/// Verify the existance of the given path
@@ -72,7 +72,7 @@ public struct FileSystem {
 	/// - Parameter path: Full path as a String
 	/// - Returns: Bool with true if path exists, otherwise false
 	public static func exists(path: String) -> Bool {
-		return FileManager.default.fileExists(atPath:path)
+		return FileManager.default.fileExists(atPath: path)
 	}
 
 	/// Creates the directory tree specified in full path, including intermediate directories
@@ -80,7 +80,7 @@ public struct FileSystem {
 	/// - Parameter path: Full path as a String
 	public static func createDirectory(path: String) {
 		do {
-			if !exists(path:path) {
+			if !exists(path: path) {
 				try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
 			}
 		} catch {

@@ -76,7 +76,7 @@ public struct Log {
 	public static func configure(level: LogLevel, destination: LogDestination = .STDOUT, _ subssystem: String? = nil, _ category: String? = nil) {
 		logLevel = level
 		logDestination = destination
-		
+
 		// experimental support for os_log
 		if #available(macOS 10.12, *) {
 			if destination == .OSLOG {

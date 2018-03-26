@@ -221,7 +221,7 @@ public class DiskStore: NSObject, NSCoding {
         let result = NSKeyedArchiver.archiveRootObject(store, toFile: pathURL.path)
         if result {
             do {
-                try _ = FileManager.default.replaceItemAt(DiskStore.storeDirectoryBaseURL, withItemAt: pathURL, options:[.usingNewMetadataOnly])
+                try _ = FileManager.default.replaceItemAt(DiskStore.storeDirectoryBaseURL, withItemAt: pathURL, options: [.usingNewMetadataOnly])
             } catch {
                 Log.error(DiskStoreError.failedToWriteApplicationSupportPath)
                 try? FileManager.default.removeItem(at: pathURL)

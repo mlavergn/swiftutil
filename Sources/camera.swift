@@ -35,7 +35,7 @@ public class Camera: NSObject, UINavigationControllerDelegate, UIImagePickerCont
 		}
 	}
 
-	public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+	public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String: Any]) {
 		self.image = info[UIImagePickerControllerOriginalImage] as? UIImage
 	}
 }

@@ -93,7 +93,7 @@ public class HTTPMulti: HTTP {
 			}
 		}
 		uploadTask.resume()
-		cndlock.lock(whenCondition:1, before: NSDate.distantFuture)
+		cndlock.lock(whenCondition: 1, before: NSDate.distantFuture)
 		cndlock.unlock(withCondition: 0)
 
 		return result!

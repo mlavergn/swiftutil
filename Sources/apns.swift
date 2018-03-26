@@ -45,7 +45,7 @@ public struct APNS {
 	}
 
 	/// call from UIApplication::didReceiveRemoteNotification
-	func didReceiveRemoteNotification(userInfo: [AnyHashable : Any]) {
+	func didReceiveRemoteNotification(userInfo: [AnyHashable: Any]) {
 		print(userInfo)
 	}
 

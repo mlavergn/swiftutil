@@ -23,7 +23,7 @@ public struct User {
 	/// - Parameter forKey: key name as a String
 	/// - Returns: value as an Int
 	public static func defaultsInteger(forKey: String) -> Int {
-		return UserDefaults().integer(forKey:forKey)
+		return UserDefaults().integer(forKey: forKey)
 	}
 
 	/// Query user defaults for a String value
@@ -31,6 +31,6 @@ public struct User {
 	/// - Parameter forKey: key name as a String
 	/// - Returns: value as an String
 	public static func defaultsString(forKey: String) -> String? {
-		return UserDefaults().string(forKey:forKey)
+		return UserDefaults().string(forKey: forKey)
 	}
 }

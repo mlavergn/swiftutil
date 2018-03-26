@@ -28,7 +28,7 @@ public extension String {
 	///
 	/// - Parameter data: UTF8 Data representation
 	public init?(data: Data) {
-		guard let (s) = String(data:data, encoding:.utf8) else {
+		guard let (s) = String(data: data, encoding: .utf8) else {
 			return nil
 		}
 		self = s
@@ -42,7 +42,7 @@ public extension String {
 
 	/// Data UTF8 representation of String
 	public var data: Data? {
-		return self.data(using:.utf8)
+		return self.data(using: .utf8)
 	}
 
 	/// Length of the String
@@ -52,7 +52,7 @@ public extension String {
 
 	/// Trims leading and trailing whitespace
 	public var trim: String {
-		return self.trimmingCharacters(in:NSCharacterSet.whitespacesAndNewlines)
+		return self.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines)
 	}
 
 	/// Extracts a substring from a given index
@@ -60,7 +60,7 @@ public extension String {
 	/// - Parameter from: character index as an Int marking the start of substring
 	/// - Returns: substring as a String
 	public func index(from: Int) -> Index {
-		return self.index(startIndex, offsetBy:from)
+		return self.index(startIndex, offsetBy: from)
 	}
 
 	/// Finds the character offset of a substring within a string
@@ -68,11 +68,11 @@ public extension String {
 	/// - Parameter substring: substring to search for as a String
 	/// - Returns: character offset as an Int
 	public func find(_ substring: String) -> Int {
-		let range = self.range(of:substring)
+		let range = self.range(of: substring)
 		if range == nil {
 			return -1
 		} else {
-			return self.distance(from:self.startIndex, to:range!.lowerBound)
+			return self.distance(from: self.startIndex, to: range!.lowerBound)
 		}
 	}
 
@@ -83,8 +83,8 @@ public extension String {
 	///   - to: characters index as an Int marking the end of substring
 	/// - Returns: substring as a String
 	public func substring(from: Int, to: Int) -> String {
-		let start = self.index(self.startIndex, offsetBy:from)
-		let end = self.index(self.startIndex, offsetBy:to)
+		let start = self.index(self.startIndex, offsetBy: from)
+		let end = self.index(self.startIndex, offsetBy: to)
 
 		return String(self[start..<end])
 		// swift 3
@@ -101,9 +101,9 @@ public extension String {
 	public func substring(from: Int) -> String {
 		var start = self.startIndex
 		if from >= 0 {
-			start = self.index(self.startIndex, offsetBy:from)
+			start = self.index(self.startIndex, offsetBy: from)
 		} else {
-			start = self.index(self.endIndex, offsetBy:from)
+			start = self.index(self.endIndex, offsetBy: from)
 		}
 
 		return String(self[start..<self.endIndex])
@@ -127,7 +127,7 @@ public extension String {
 	/// - Parameter index: index of character as Int
 	/// - Returns: Character
 	public func characterAt(index: Int) -> Character {
-		return self[self.index(self.startIndex, offsetBy:index)]
+		return self[self.index(self.startIndex, offsetBy: index)]
 	}
 
 	/// Treats the string as a path and isolates the filename
@@ -152,7 +152,7 @@ public extension String {
 		let slen = scalars.count
 		var drop = 0
 		for i in (0..<slen) {
-			if !charSet.contains(scalars[scalars.index(scalars.startIndex, offsetBy:i)]) {
+			if !charSet.contains(scalars[scalars.index(scalars.startIndex, offsetBy: i)]) {
 				break
 			}
 			drop += 1
@@ -167,7 +167,7 @@ public extension String {
 		let slen = scalars.count
 		var drop = 0
 		for i in (0..<slen) {
-			if !charSet.contains(scalars[scalars.index(scalars.startIndex, offsetBy:slen-i-1)]) {
+			if !charSet.contains(scalars[scalars.index(scalars.startIndex, offsetBy: slen-i-1)]) {
 				break
 			}
 			drop += 1

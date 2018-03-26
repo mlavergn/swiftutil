@@ -14,7 +14,7 @@ public struct JSON {
 	/// - Returns: Any optional
 	public static func decode(_ payload: Data) -> Any? {
 		do {
-			return try JSONSerialization.jsonObject(with:payload, options: [.mutableContainers, .allowFragments])
+			return try JSONSerialization.jsonObject(with: payload, options: [.mutableContainers, .allowFragments])
 		} catch {
 			return nil
 		}
@@ -26,7 +26,7 @@ public struct JSON {
 	/// - Returns: Data optional
 	public static func encode(_ object: Any) -> Data? {
 		do {
-			return try JSONSerialization.data(withJSONObject:object, options:[])
+			return try JSONSerialization.data(withJSONObject: object, options: [])
 		} catch {
 			return nil
 		}

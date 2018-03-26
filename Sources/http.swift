@@ -75,8 +75,8 @@ public class HTTP: NSObject {
 	/// Primary initializer
 	override public init() {
 		self.sessionConfiguration = URLSessionConfiguration.default
-		self.session = URLSession(configuration:sessionConfiguration)
-		self.request = URLRequest(url:URL(string:"http://127.0.0.1")!)
+		self.session = URLSession(configuration: sessionConfiguration)
+		self.request = URLRequest(url: URL(string: "http://127.0.0.1")!)
 		super.init()
 	}
 
@@ -92,7 +92,7 @@ public class HTTP: NSObject {
 			self.sessionConfiguration.httpAdditionalHeaders = [name: value]
 		}
 
-		self.session = URLSession(configuration:sessionConfiguration)
+		self.session = URLSession(configuration: sessionConfiguration)
 	}
 
 	/// Request URL as a String
@@ -100,8 +100,8 @@ public class HTTP: NSObject {
 		set(urlString) {
 			let urlScrubbed = urlString.rstrip
 			Log.debug(urlScrubbed)
-			if let url = URL(string:urlScrubbed) {
-				self.request = URLRequest(url:url)
+			if let url = URL(string: urlScrubbed) {
+				self.request = URLRequest(url: url)
 				self.request.setValue(HTTPUserAgentKey.iOS.rawValue, forHTTPHeaderField: HTTPHeaderKey.userAgent.rawValue)
 			} else {
 				Log.error(NSError.error("Unable to parse url \(urlString)"))
@@ -125,14 +125,14 @@ public class HTTP: NSObject {
 		}
 		get {
 			guard let method = self.request.httpMethod else {
-    		return HTTPMethodKey.get
+				return HTTPMethodKey.get
 			}
 
 			switch method {
-				case HTTPMethodKey.post.rawValue:
-					return HTTPMethodKey.post
+			case HTTPMethodKey.post.rawValue:
+				return HTTPMethodKey.post
 			default:
-					return HTTPMethodKey.get
+				return HTTPMethodKey.get
 			}
 		}
 	}
@@ -262,7 +262,7 @@ public class HTTP: NSObject {
 			}
 		}
 		downloadTask.resume()
-		cndlock.lock(whenCondition:1, before: NSDate.distantFuture)
+		cndlock.lock(whenCondition: 1, before: NSDate.distantFuture)
 		cndlock.unlock(withCondition: 0)
 
 		guard result != nil else {
@@ -300,7 +300,7 @@ public class HTTP: NSObject {
 			}
 		}
 		uploadTask.resume()
-		cndlock.lock(whenCondition:1, before: NSDate.distantFuture)
+		cndlock.lock(whenCondition: 1, before: NSDate.distantFuture)
 		cndlock.unlock(withCondition: 0)
 
 		return result
@@ -334,7 +334,7 @@ public class HTTP: NSObject {
 			}
 		}
 		downloadTask.resume()
-		cndlock.lock(whenCondition:1, before: NSDate.distantFuture)
+		cndlock.lock(whenCondition: 1, before: NSDate.distantFuture)
 		cndlock.unlock(withCondition: 0)
 
 		return result

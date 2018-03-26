@@ -56,7 +56,7 @@ public struct DateTime {
 		components.month = month
 		components.day = day
 
-		return NSCalendar(identifier: NSCalendar.Identifier.gregorian)?.date(from:components)
+		return NSCalendar(identifier: NSCalendar.Identifier.gregorian)?.date(from: components)
 	}
 
 	/// Constructs a Date from a format mask and string representation
@@ -70,6 +70,6 @@ public struct DateTime {
 		dateFormat.timeZone = NSTimeZone.default
 		dateFormat.dateFormat = format
 
-		return dateFormat.date(from:date)
+		return dateFormat.date(from: date)
 	}
 }

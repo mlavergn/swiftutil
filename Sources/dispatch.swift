@@ -40,7 +40,7 @@ public struct Dispatch {
 
 	/// The shared background dispatch queue
 	public static var backgroundQueue: DispatchQueue {
-		return DispatchQueue.global(qos:.background)
+		return DispatchQueue.global(qos: .background)
 	}
 
 	/// Creates a new named queue
