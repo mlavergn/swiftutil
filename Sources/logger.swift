@@ -14,11 +14,11 @@
 /// - license: MIT
 
 import Foundation
-import os.log
 
 #if os(Linux)
 import Glibc
 #else
+import os.log
 import Darwin
 #endif
 
@@ -73,7 +73,7 @@ public struct Log {
 	/// - Parameters:
 	///   - level: Filter level for output
 	///   - destination: Log destination
-	public static func configure(level: LogLevel, destination: LogDestination = .STDOUT, _ subssystem: String? = nil, _ category: String? = nil) {
+	public static func configure(level: LogLevel, destination: LogDestination = .STDOUT, _ subssystem: String? = Bundle.main.bundleIdentifier, _ category: String? = nil) {
 		logLevel = level
 		logDestination = destination
 

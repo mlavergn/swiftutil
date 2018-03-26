@@ -5,7 +5,7 @@
 /// - license: MIT
 import Foundation
 
-public class Task: NSObject {
+public struct Task {
 #if os(macOS)
     /// Execute an OS command and return the captured stdout
     func execute(_ command: String, _ args: [String]) -> String {

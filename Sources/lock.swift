@@ -24,7 +24,7 @@ public enum FutureState: Int {
 	case finished
 }
 
-public class Future: NSObject {
+public struct Future {
 
 	/// Shared condition for non-queue waits
 	let cnd = NSCondition()
